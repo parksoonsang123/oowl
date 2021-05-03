@@ -78,7 +78,6 @@ public class WriteBoardActivity extends AppCompatActivity {
 
     //업로드된 사진 갯수
     private int cnt = 0;
-    private int flag = -1;
 
     long time;
     long imagename;
@@ -164,7 +163,6 @@ public class WriteBoardActivity extends AppCompatActivity {
 
 
                 cnt = 0;
-                flag = -1;
                 list2.clear();
                 list3.clear();
 
@@ -380,6 +378,8 @@ public class WriteBoardActivity extends AppCompatActivity {
 
     private void postimage(){
 
+        final String userid = mAuth.getCurrentUser().getUid();
+
         int select1 = rg1.getCheckedRadioButtonId();
         int select2 = rg2.getCheckedRadioButtonId();
         int select3 = rg3.getCheckedRadioButtonId();
@@ -389,31 +389,48 @@ public class WriteBoardActivity extends AppCompatActivity {
         rb3 = findViewById(select3);
 
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("Post").push();
-        String postid2 = databaseReference.getKey();
 
-        time = System.currentTimeMillis();
+        databaseReference2 = database.getReference("Users").child(userid);
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
 
-        HashMap result = new HashMap<>();
+                databaseReference = database.getReference("Post").push();
+                String postid2 = databaseReference.getKey();
 
-        result.put("title", writetitle.getText().toString());
-        result.put("contents", writecontents.getText().toString());
-        result.put("writetime", makeTimeStamp(time));
-        result.put("jjimcnt", "0");
-        result.put("postid", postid2);
-        //result.put("userid", userid);
-        //result.put("nickname", nickname);
-        result.put("imageurilist", list2);
-        result.put("imagenamelist", list3);
-        result.put("transyesno", rb1.getText().toString());
-        result.put("tradeyesno", rb2.getText().toString());
-        result.put("suggest", rb3.getText().toString());
-        result.put("address", address.getText().toString());
-        result.put("price", price.getText().toString());
+                time = System.currentTimeMillis();
+
+                HashMap result = new HashMap<>();
+
+                result.put("title", writetitle.getText().toString());
+                result.put("contents", writecontents.getText().toString());
+                result.put("writetime", makeTimeStamp(time));
+                result.put("jjimcnt", "0");
+                result.put("postid", postid2);
+                result.put("userid", userid);
+                result.put("nickname", item.getNickname());
+                result.put("imageurilist", list2);
+                result.put("imagenamelist", list3);
+                result.put("transyesno", rb1.getText().toString());
+                result.put("tradeyesno", rb2.getText().toString());
+                result.put("suggest", rb3.getText().toString());
+                result.put("address", address.getText().toString());
+                result.put("price", price.getText().toString());
 
 
-        databaseReference.setValue(result);
-        finish();
+                databaseReference.setValue(result);
+                finish();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     private String makeTimeStamp(long in){

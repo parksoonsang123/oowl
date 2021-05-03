@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/board_image"
+        android:scaleType="fitXY"
         android:layout_width="150dp"
         android:layout_height="150dp"/>
 
@@ -23,13 +24,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="제목"
-            android:textSize="35dp"
+            android:textSize="25dp"
             android:textColor="#000000"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <TextView
@@ -37,14 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="닉네임"
-                android:textSize="18dp"
+                android:textSize="13dp"
                 android:textColor="#939393"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  |  "
-                android:textSize="18dp"
+                android:textSize="13dp"
                 android:textColor="#939393"/>
 
             <TextView
@@ -52,19 +53,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="글쓴시간"
-                android:textSize="18dp"
+                android:textSize="13dp"
                 android:textColor="#939393"/>
         </LinearLayout>
 
         <TextView
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/board_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가격"
             android:textStyle="bold"
-            android:textSize="28dp"
+            android:textSize="20dp"
             android:textColor="#000000"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,8 +94,10 @@
 
         </LinearLayout>
 
-
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
