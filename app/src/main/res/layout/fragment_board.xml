@@ -5,10 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".BoardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/free_board_recyclerview1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="123123123" />
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/board_item1" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/freeboard_floatingactionbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_baseline_add_24"
+        android:backgroundTint="#FCB955"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"/>
 
 </FrameLayout>
