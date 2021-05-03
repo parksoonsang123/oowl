@@ -251,8 +251,6 @@
 
 
         <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/addresslayout"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -286,11 +284,86 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/itemborder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가격 설정"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"/>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="50"
+                android:progress="25"
+                android:progressDrawable="@drawable/seekbar_seekbar1"
+                android:thumb="@drawable/ic_baseline_brightness_1_24"/>
+            <!--여기 thumb 이미지 파일 크기를 줄여서 넣어으면 완전 마무리 될 것 같은데 방법을 잘 모르겠어요-->
+
+
+            <ImageView
+                android:id="@+id/leftcircle"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignLeft="@id/seekBar"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="1.5dp"
+                android:src="@drawable/question_03_circle" />
+
+            <ImageView
+                android:id="@+id/rightcircle"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignRight="@id/seekBar"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="1.5dp"
+                android:src="@drawable/question_03_circle" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/seekbar_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="₩25000"
+            android:textColor="#000000"
+            android:textSize="12dp"
+            android:layout_marginTop="2.2dp" />
+
+
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/write_recyclerview"

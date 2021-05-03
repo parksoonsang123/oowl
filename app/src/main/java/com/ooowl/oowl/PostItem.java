@@ -12,12 +12,13 @@ public class PostItem {
     private ArrayList<String> imageurilist = new ArrayList<>();
     private ArrayList<String> imagenamelist = new ArrayList<>();
     private String price;
+    private String address;
     private String nickname;
     private String transyesno;
     private String tradeyesno;
     private String suggest;
 
-    public PostItem(String jjimcnt, String title, String contents, String writetime, String postid, String userid, ArrayList<String> imageurilist, ArrayList<String> imagenamelist, String price, String nickname, String transyesno, String tradeyesno, String suggest) {
+    public PostItem(String jjimcnt, String title, String contents, String writetime, String postid, String userid, ArrayList<String> imageurilist, ArrayList<String> imagenamelist, String price, String address, String nickname, String transyesno, String tradeyesno, String suggest) {
         this.jjimcnt = jjimcnt;
         this.title = title;
         this.contents = contents;
@@ -27,6 +28,7 @@ public class PostItem {
         this.imageurilist = imageurilist;
         this.imagenamelist = imagenamelist;
         this.price = price;
+        this.address = address;
         this.nickname = nickname;
         this.transyesno = transyesno;
         this.tradeyesno = tradeyesno;
@@ -46,6 +48,15 @@ public class PostItem {
 
     public String getJjimcnt() {
         return jjimcnt;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setJjimcnt(String jjimcnt) {

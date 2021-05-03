@@ -15,7 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -54,6 +57,15 @@ public class WriteBoardActivity extends AppCompatActivity {
     RadioGroup rg1;
     RadioGroup rg2;
     RadioGroup rg3;
+    RadioButton rb0;
+    RadioButton rb1;
+    RadioButton rb2;
+    RadioButton rb3;
+
+    EditText address;
+
+    SeekBar sb;
+    TextView price;
 
     RecyclerView recyclerView;
     WriteBoardAdapter adapter;
@@ -78,9 +90,37 @@ public class WriteBoardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String postid = intent.getStringExtra("postid");
 
+        sb = findViewById(R.id.seekBar);
+        price = findViewById(R.id.text);
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress == 0){
+                    price.setText("₩0");
+                }
+                else{
+                    price.setText("₩" + String.valueOf(progress * 10) + "00");
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
         writetitle = findViewById(R.id.write_title);
         writecontents = findViewById(R.id.write_contents);
         completebtn = findViewById(R.id.write_complete_btn);
+        address = findViewById(R.id.address);
 
         write_back = findViewById(R.id.write_back);
         write_back.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +130,12 @@ public class WriteBoardActivity extends AppCompatActivity {
             }
         });
 
+
+        rg1 = findViewById(R.id.rg1);
+        rg2 = findViewById(R.id.rg2);
+        rg3 = findViewById(R.id.rg3);
+
+
         recyclerView = findViewById(R.id.write_recyclerview);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(manager);
@@ -98,6 +144,24 @@ public class WriteBoardActivity extends AppCompatActivity {
         completebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int select1 = rg1.getCheckedRadioButtonId();
+                int select2 = rg2.getCheckedRadioButtonId();
+                int select3 = rg3.getCheckedRadioButtonId();
+
+                if(select1 == -1){
+                    Toast.makeText(WriteBoardActivity.this, "가격 제안 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(select2 == -1){
+                    Toast.makeText(WriteBoardActivity.this, "배송 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(select3 == -1){
+                    Toast.makeText(WriteBoardActivity.this, "직거래 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 cnt = 0;
                 list2.clear();
                 list3.clear();
@@ -311,6 +375,15 @@ public class WriteBoardActivity extends AppCompatActivity {
     }
 
     private void postimage(){
+
+        int select1 = rg1.getCheckedRadioButtonId();
+        int select2 = rg2.getCheckedRadioButtonId();
+        int select3 = rg3.getCheckedRadioButtonId();
+
+        rb1 = findViewById(select1);
+        rb2 = findViewById(select2);
+        rb3 = findViewById(select3);
+
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("Post").push();
         String postid2 = databaseReference.getKey();
@@ -325,8 +398,15 @@ public class WriteBoardActivity extends AppCompatActivity {
         result.put("jjimcnt", "0");
         result.put("postid", postid2);
         //result.put("userid", userid);
+        //result.put("nickname", nickname);
         result.put("imageurilist", list2);
         result.put("imagenamelist", list3);
+        result.put("transyesno", rb1.getText().toString());
+        result.put("tradeyesno", rb2.getText().toString());
+        result.put("suggest", rb3.getText().toString());
+        result.put("address", address.getText().toString());
+        result.put("price", price.getText().toString());
+
 
         databaseReference.setValue(result);
         finish();
