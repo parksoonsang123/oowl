@@ -6,14 +6,14 @@
     tools:context=".BoardFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/free_board_recyclerview1"
+        android:id="@+id/board_recyclerview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/board_item1" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/freeboard_floatingactionbutton"
+        android:id="@+id/board_floatingactionbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
