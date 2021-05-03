@@ -78,6 +78,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
     //업로드된 사진 갯수
     private int cnt = 0;
+    private int flag = -1;
 
     long time;
     long imagename;
@@ -91,7 +92,7 @@ public class WriteBoardActivity extends AppCompatActivity {
         final String postid = intent.getStringExtra("postid");
 
         sb = findViewById(R.id.seekBar);
-        price = findViewById(R.id.text);
+        price = findViewById(R.id.seekbar_text);
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -163,6 +164,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
 
                 cnt = 0;
+                flag = -1;
                 list2.clear();
                 list3.clear();
 
@@ -183,7 +185,7 @@ public class WriteBoardActivity extends AppCompatActivity {
                         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                cnt++;
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -211,8 +213,10 @@ public class WriteBoardActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Uri> task) {
                                 if(task.isSuccessful()){
 
+                                    cnt++;
                                     Uri downloadUri = task.getResult();
                                     list2.add(downloadUri.toString());
+
 
                                     if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
                                         progressDialog.dismiss();

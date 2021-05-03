@@ -269,6 +269,7 @@
                 android:layout_marginLeft="10dp"
                 android:hint="간단한 주소를 입력해주세요."
                 android:textColorHint="#939393"
+                android:textColor="#000000"
                 android:textSize="15dp"
                 android:gravity="center"
                 android:layout_width="200dp"

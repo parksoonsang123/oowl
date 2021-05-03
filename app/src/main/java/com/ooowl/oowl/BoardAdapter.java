@@ -44,7 +44,17 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         holder.title.setText(item1.getTitle());
         holder.nickname.setText(item1.getNickname());
         holder.time.setText(item1.getWritetime());
-        holder.price.setText(item1.getPrice());
+
+        String ppp = "";
+        String p = item1.getPrice();
+        String pp = p.replace("₩", "");
+        if(pp.length() == 4){
+            ppp = pp.substring(0,1)+","+pp.substring(1,pp.length()) + "원";
+        }
+        else if(pp.length() == 5){
+            ppp = pp.substring(0,2)+","+pp.substring(2,pp.length()) + "원";
+        }
+        holder.price.setText(ppp);
         holder.jjimcnt.setText(item1.getJjimcnt()+"");
 
         GradientDrawable drawable = (GradientDrawable) context.getDrawable(R.drawable.background_rounding);
