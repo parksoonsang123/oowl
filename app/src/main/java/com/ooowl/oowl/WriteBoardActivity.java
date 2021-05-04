@@ -46,6 +46,7 @@ public class WriteBoardActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference2;
+    private DatabaseReference databaseReference4;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseStorage storage;
 
@@ -75,6 +76,10 @@ public class WriteBoardActivity extends AppCompatActivity {
     private ArrayList<String> list2 = new ArrayList<>();
     //imagenamelist
     private ArrayList<String> list3 = new ArrayList<>();
+
+    private ArrayList<String> remainlist = new ArrayList<>();
+
+    private ArrayList<Integer> removelist = new ArrayList<>();
 
     //업로드된 사진 갯수
     private int cnt = 0;
@@ -166,73 +171,189 @@ public class WriteBoardActivity extends AppCompatActivity {
                 list2.clear();
                 list3.clear();
 
-                if(list.size() >= 2){
-                    storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
+                if(postid == null){ //글쓰기
+                    if(list.size() >= 2){
+                        storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
 
-                    final ProgressDialog progressDialog = new ProgressDialog(WriteBoardActivity.this, R.style.MyDialogTheme);
-                    progressDialog.setTitle("이미지 업로드");
-                    progressDialog.show();
+                        final ProgressDialog progressDialog = new ProgressDialog(WriteBoardActivity.this, R.style.MyDialogTheme);
+                        progressDialog.setTitle("이미지 업로드");
+                        progressDialog.show();
 
-                    for(int i=0;i<list.size()-1;i++){
-                        imagename = System.currentTimeMillis();
-                        list3.add(imagename+"");
-                        Uri file = list.get(i).getImageuri();
-                        final StorageReference riversRef = storageRef.child("images/"+imagename);
-                        UploadTask uploadTask = riversRef.putFile(file);
-                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        for(int i=0;i<list.size()-1;i++){
+                            imagename = System.currentTimeMillis();
+                            list3.add(imagename+"");
+                            Uri file = list.get(i).getImageuri();
+                            final StorageReference riversRef = storageRef.child("images/"+imagename);
+                            UploadTask uploadTask = riversRef.putFile(file);
+                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(WriteBoardActivity.this, "업로드 실패!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                progressDialog.setMessage("업로드 중...");
-                            }
-                        });
-
-                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if(!task.isSuccessful()){
-                                    throw task.getException();
                                 }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(WriteBoardActivity.this, "업로드 실패!", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                    progressDialog.setMessage("업로드 중...");
+                                }
+                            });
 
-                                return riversRef.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if(task.isSuccessful()){
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if(!task.isSuccessful()){
+                                        throw task.getException();
+                                    }
 
-                                    cnt++;
-                                    Uri downloadUri = task.getResult();
-                                    list2.add(downloadUri.toString());
+                                    return riversRef.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if(task.isSuccessful()){
+
+                                        cnt++;
+                                        Uri downloadUri = task.getResult();
+                                        list2.add(downloadUri.toString());
 
 
-                                    if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
-                                        progressDialog.dismiss();
-                                        postimage();
+                                        if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                            progressDialog.dismiss();
+                                            postimage(postid);
+                                        }
+                                    }
+                                    else{
+                                        //실패
                                     }
                                 }
-                                else{
-                                    //실패
-                                }
-                            }
-                        });
+                            });
+                        }
+
+
                     }
+                    else{
+                        Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{   //수정하기
+
+                    remainlist.clear();
+                    removelist.clear();
+                    databaseReference4 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
+                    databaseReference4.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            PostItem item = snapshot.getValue(PostItem.class);
+                            for(int k=0;k<item.getImagenamelist().size();k++){
+                                remainlist.add(item.getImagenamelist().get(k));
+                            }
+                            if(list.size() >= 2){   //이미지 파일 있을 때
+                                storage = FirebaseStorage.getInstance();
+                                StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
+
+                                final ProgressDialog progressDialog = new ProgressDialog(WriteBoardActivity.this, R.style.MyDialogTheme);
+                                progressDialog.setTitle("이미지 업로드");
+                                progressDialog.show();
+
+                                for(int i = 0; i < list.size() - 1; i++){
+                                    imagename = System.currentTimeMillis();
+
+                                    if(list.get(i).getImageuri().toString().contains("http")){  //기존 이미지
+                                        int index = 0;
+                                        for(int j=0;j<item.getImageurilist().size();j++){
+                                            if(list.get(i).getImageuri().toString().equals(item.getImageurilist().get(j))){
+                                                index = j;
+                                                removelist.add(index);
+                                                break;
+                                            }
+                                        }
+
+                                        list3.add(item.getImagenamelist().get(index));
+                                        list2.add(item.getImageurilist().get(index));
+                                        cnt++;
+
+                                        if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                            progressDialog.dismiss();
+                                            postimage(postid);
+                                        }
+                                    }
+                                    else{   //새로운 이미지
+                                        list3.add(imagename+"");
+                                        Uri file = list.get(i).getImageuri();
+                                        //StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+                                        final StorageReference riversRef = storageRef.child("images/"+imagename);
+                                        UploadTask uploadTask = riversRef.putFile(file);
+                                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(WriteBoardActivity.this, "업로드 실패!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                                progressDialog.setMessage("업로드 중...");
+                                            }
+                                        });
+
+                                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                            @Override
+                                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                                if(!task.isSuccessful()){
+                                                    throw task.getException();
+                                                }
+
+                                                return riversRef.getDownloadUrl();
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Uri> task) {
+                                                if(task.isSuccessful()){
+                                                    cnt++;
+                                                    Uri downloadUri = task.getResult();
+                                                    list2.add(downloadUri.toString());
+
+                                                    if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                                        progressDialog.dismiss();
+                                                        postimage(postid);
+                                                    }
+                                                }
+                                                else{
+                                                    //실패
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+
+
+
 
 
                 }
-                else{
-                    Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
-                }
+
+
             }
         });
 
@@ -261,7 +382,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
             recyclerView.setAdapter(adapter);
         }
-        else{
+        else{   //수정
             databaseReference2 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -275,7 +396,9 @@ public class WriteBoardActivity extends AppCompatActivity {
                         Uri uri = Uri.parse(item.getImageurilist().get(i));
                         list.add(new WriteBoardItem(uri, Code.ViewType.FIRST));
                     }
+
                     list.add(new WriteBoardItem(null, Code.ViewType.SECOND));
+
                     adapter = new WriteBoardAdapter(list, getApplicationContext());
                     adapter.setOnPlusClickListener(new WriteBoardAdapter.OnPlusClickListener() {
                         @Override
@@ -376,7 +499,7 @@ public class WriteBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void postimage(){
+    private void postimage(String postid){
 
         final String userid = mAuth.getCurrentUser().getUid();
 
@@ -390,47 +513,91 @@ public class WriteBoardActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
 
-        databaseReference2 = database.getReference("Users").child(userid);
-        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UsersItem item = snapshot.getValue(UsersItem.class);
+        if(postid == null){
+            databaseReference2 = database.getReference("Users").child(userid);
+            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UsersItem item = snapshot.getValue(UsersItem.class);
 
-                databaseReference = database.getReference("Post").push();
-                String postid2 = databaseReference.getKey();
+                    databaseReference = database.getReference("Post").push();
+                    String postid2 = databaseReference.getKey();
 
-                time = System.currentTimeMillis();
+                    time = System.currentTimeMillis();
 
-                HashMap result = new HashMap<>();
+                    HashMap result = new HashMap<>();
 
-                result.put("title", writetitle.getText().toString());
-                result.put("contents", writecontents.getText().toString());
-                result.put("writetime", makeTimeStamp(time));
-                result.put("jjimcnt", "0");
-                result.put("postid", postid2);
-                result.put("userid", userid);
-                result.put("nickname", item.getNickname());
-                result.put("imageurilist", list2);
-                result.put("imagenamelist", list3);
-                result.put("transyesno", rb1.getText().toString());
-                result.put("tradeyesno", rb2.getText().toString());
-                result.put("suggest", rb3.getText().toString());
-                result.put("address", address.getText().toString());
-                result.put("price", price.getText().toString());
+                    result.put("title", writetitle.getText().toString());
+                    result.put("contents", writecontents.getText().toString());
+                    result.put("writetime", makeTimeStamp(time));
+                    result.put("jjimcnt", "0");
+                    result.put("postid", postid2);
+                    result.put("userid", userid);
+                    result.put("nickname", item.getNickname());
+                    result.put("imageurilist", list2);
+                    result.put("imagenamelist", list3);
+                    result.put("transyesno", rb1.getText().toString());
+                    result.put("tradeyesno", rb2.getText().toString());
+                    result.put("suggest", rb3.getText().toString());
+                    result.put("address", address.getText().toString());
+                    result.put("price", price.getText().toString());
 
 
-                databaseReference.setValue(result);
-                finish();
+                    databaseReference.setValue(result);
+                    finish();
 
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else{
+            databaseReference = database.getReference("Post").child(postid);
+
+            time = System.currentTimeMillis();
+
+            HashMap result = new HashMap<>();
+
+            result.put("title", writetitle.getText().toString());
+            result.put("contents", writecontents.getText().toString());
+            result.put("writetime", makeTimeStamp(time));
+            result.put("imageurilist", list2);
+            result.put("imagenamelist", list3);
+            result.put("transyesno", rb1.getText().toString());
+            result.put("tradeyesno", rb2.getText().toString());
+            result.put("suggest", rb3.getText().toString());
+            result.put("address", address.getText().toString());
+            result.put("price", price.getText().toString());
+
+
+            databaseReference.setValue(result);
+            finish();
+
+        }
+
+        for(int i=0;i<remainlist.size();i++){
+            int check = -1;
+            for(int j=0;j<removelist.size();j++){
+                if(i == removelist.get(j)){
+                    check = 1;
+                    break;
+                }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            if(check == -1){
+                imagedelete2(remainlist.get(i));
             }
-        });
+        }
 
 
+    }
+
+    private void imagedelete2(String imagename){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("images/"+imagename);
+        storageRef.delete();
     }
 
     private String makeTimeStamp(long in){
