@@ -84,11 +84,11 @@
             android:layout_marginTop="25dp">
 
             <TextView
-                android:id="@+id/FindUser"
+                android:id="@+id/tv_findpwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="아이디/비밀번호 찾기"
+                android:text="비밀번호 찾기"
                 android:textColor="#808080"
                 android:textSize="15sp"
                 android:layout_weight="1"/>

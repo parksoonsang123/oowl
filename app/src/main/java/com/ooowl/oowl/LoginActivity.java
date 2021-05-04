@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -40,20 +42,60 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //로그인 요청
-                String strEmail = mEtEmail.getText().toString();
-                String strPwd = mEtPwd.getText().toString();
+                String strEmail="", strPwd="";
+                strEmail = mEtEmail.getText().toString().trim();
+                strPwd = mEtPwd.getText().toString();
 
+                if(TextUtils.isEmpty(strEmail)){
+                    Toast.makeText(LoginActivity.this, "이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(strPwd)){
+                    Toast.makeText(LoginActivity.this, "암호를 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            //로그인 성공
-                            Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
-                            startActivity(intent);
-                            finish(); //현재 액티비티 파괴
+                            if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
+                                //로그인 성공
+                                Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                startActivity(intent);
+                                finish(); //현재 액티비티 파괴
+                            }else{
+                                Toast.makeText(LoginActivity.this, "인증 메일을 확인해주세요!", Toast.LENGTH_LONG).show();
+                            }
                         } else{
                             //로그인 실패
-                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                            switch (errorCode) {
+
+                                case "ERROR_INVALID_EMAIL":
+                                    mEtEmail.setError("이메일 형식에 맞게 다시 입력해주세요!");
+                                    mEtEmail.requestFocus();
+                                    break;
+
+                                case "ERROR_WRONG_PASSWORD":
+                                    mEtPwd.setError("암호가 틀렸습니다.");
+                                    mEtPwd.requestFocus();
+                                    mEtPwd.setText("");
+                                    break;
+
+                                case "ERROR_USER_DISABLED":
+                                    Toast.makeText(LoginActivity.this, "관리자에 의해 이용 중지된 계정입니다.\n관리자에게 문의하세요!", Toast.LENGTH_LONG).show();
+                                    break;
+
+                                case "ERROR_USER_NOT_FOUND":
+                                    mEtEmail.setError("등록되지 않은 이메일입니다.");
+                                    mEtEmail.requestFocus();
+                                    break;
+
+                                default:
+                                    Toast.makeText(LoginActivity.this, "로그인에 실패하였습니다.\n" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    break;
+                            }
                         }
                     }
                 });
@@ -66,6 +108,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //  회원가입 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        TextView tv_findpwd = findViewById(R.id.tv_findpwd);
+        tv_findpwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
                 startActivity(intent);
             }
         });
