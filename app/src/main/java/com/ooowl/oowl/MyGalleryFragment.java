@@ -42,7 +42,7 @@ public class MyGalleryFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.mg_recyclerview);
         //recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(view.getContext(),3,GridLayoutManager.VERTICAL,false);
+        layoutManager = new GridLayoutManager(view.getContext(),3);
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>();
 
