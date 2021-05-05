@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FindActivity"></activity>
+        <activity android:name=".ChattingActivity"></activity>
+        <activity android:name=".FindActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".BoardDetailActivity" />
         <activity android:name=".WriteBoardActivity" />

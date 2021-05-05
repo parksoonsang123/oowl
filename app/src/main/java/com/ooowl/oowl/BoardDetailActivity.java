@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +48,7 @@ public class BoardDetailActivity extends AppCompatActivity {
     ImageView back;
     Button remake;
     Button del;
+    Button chat;
 
     TextView nick;
     TextView time;
@@ -104,11 +106,66 @@ public class BoardDetailActivity extends AppCompatActivity {
 
         remake = findViewById(R.id.detail_remake);
         del = findViewById(R.id.detail_del);
+        chat = findViewById(R.id.chat);
 
         if(!userid.equals(postuserid)){
             remake.setVisibility(View.GONE);
             del.setVisibility(View.GONE);
         }
+        else{
+            chat.setVisibility(View.GONE);
+        }
+
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatList");
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int flag = -1;
+                        for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                            ChatListItem item = snapshot1.getValue(ChatListItem.class);
+                            if(item.getMyid().equals(userid) && item.getPostid().equals(postid)){   //이미 채팅중
+                                flag = 1;
+                                break;
+                            }
+                        }
+
+                        if(flag == -1){
+                            DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("ChatList").push();
+                            String chatid = reference1.getKey();
+
+                            HashMap result = new HashMap<>();
+
+                            result.put("chatid", chatid);
+                            result.put("postid", postid);
+                            result.put("sellid", postuserid);
+                            result.put("myid", userid);
+
+                            reference1.setValue(result);
+
+
+                            Intent intent1 = new Intent(BoardDetailActivity.this, ChattingActivity.class);
+                            intent1.putExtra("postid", postid);
+                            intent1.putExtra("chatid", chatid);
+                            intent1.putExtra("where", "1");
+                            startActivity(intent1);
+                            finish();
+                        }
+                        else{
+                            Toast.makeText(BoardDetailActivity.this, "이미 채팅 중 입니다!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
 
 
         remake.setOnClickListener(new View.OnClickListener() {
@@ -181,15 +238,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                        @Override
                        public void onDataChange(@NonNull DataSnapshot snapshot) {
                             JJimItem item = snapshot.getValue(JJimItem.class);
-                            if(item.getPress().equals("1")){
-                                HashMap result = new HashMap<>();
-                                result.put("press", "0");
-                                reference2.setValue(result);
 
-                                jjim.setBackgroundResource(R.drawable.heart2);
-                                jjimminus(postid);
-                            }
-                            else{
+                            if(item == null){
                                 HashMap result = new HashMap<>();
                                 result.put("press", "1");
                                 reference2.setValue(result);
@@ -197,6 +247,26 @@ public class BoardDetailActivity extends AppCompatActivity {
                                 jjim.setBackgroundResource(R.drawable.heart);
                                 jjimplus(postid);
                             }
+                            else{
+                                if(item.getPress().equals("1")){
+                                    HashMap result = new HashMap<>();
+                                    result.put("press", "0");
+                                    reference2.setValue(result);
+
+                                    jjim.setBackgroundResource(R.drawable.heart2);
+                                    jjimminus(postid);
+                                }
+                                else{
+                                    HashMap result = new HashMap<>();
+                                    result.put("press", "1");
+                                    reference2.setValue(result);
+
+                                    jjim.setBackgroundResource(R.drawable.heart);
+                                    jjimplus(postid);
+                                }
+                            }
+
+
                        }
 
                        @Override
@@ -209,6 +279,29 @@ public class BoardDetailActivity extends AppCompatActivity {
         });
 
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("JJim").child(userid).child(postid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                JJimItem item = snapshot.getValue(JJimItem.class);
+                if(item == null){
+                    jjim.setBackgroundResource(R.drawable.heart2);
+                }
+                else{
+                    if(item.getPress().equals("1")){
+                        jjim.setBackgroundResource(R.drawable.heart);
+                    }
+                    else{
+                        jjim.setBackgroundResource(R.drawable.heart2);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         reference = FirebaseDatabase.getInstance().getReference("Post").child(postid);
@@ -288,6 +381,12 @@ public class BoardDetailActivity extends AppCompatActivity {
 
 
     public void jjimplus(String postid){
+
+        String jc = jjimcnt.getText().toString();
+        int jcc = Integer.parseInt(jc) + 1;
+        String jc2 = jcc+"";
+        jjimcnt.setText(jc2);
+
         reference4 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
         reference4.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -308,6 +407,12 @@ public class BoardDetailActivity extends AppCompatActivity {
     }
 
     public void jjimminus(String postid){
+
+        String jc = jjimcnt.getText().toString();
+        int jcc = Integer.parseInt(jc) - 1;
+        String jc2 = jcc+"";
+        jjimcnt.setText(jc2);
+
         reference4 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
         reference4.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -5,8 +5,8 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/mg_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher_background" />
 </LinearLayout>
