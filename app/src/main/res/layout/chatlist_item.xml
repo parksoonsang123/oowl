@@ -44,8 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#939393"
-                android:textSize="10dp"
-                android:text="최근 채팅 시간"/>
+                android:textSize="10dp"/>
 
 
         </LinearLayout>
@@ -60,9 +59,7 @@
                 android:id="@+id/contents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="최근 채팅 내용"
-                android:textColor="#000000"
-                android:textStyle="bold"/>
+                android:textColor="#000000"/>
 
 
 

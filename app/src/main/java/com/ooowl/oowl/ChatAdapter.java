@@ -18,6 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
@@ -27,6 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     private Context context = null;
     private List<ChatListItem> mDataList;
+    private ArrayList<ChattingItem2> list = new ArrayList<>();
 
     public ChatAdapter(Context context, List<ChatListItem> mDataList) {
         this.context = context;
@@ -43,7 +47,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         auth = FirebaseAuth.getInstance();
         my = auth.getUid();
 
@@ -54,6 +58,29 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     UsersItem item = snapshot.getValue(UsersItem.class);
                     holder.nickname.setText(item.getNickname());
+
+                    DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
+                    reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                                ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
+                                list.add(item2);
+                            }
+
+                            Collections.sort(list, new Ascending());
+
+                            holder.contents.setText(list.get(0).getContents());
+
+                            Long t = Long.parseLong(list.get(0).getTime());
+                            holder.time.setText(formatTimeString(t));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -111,8 +138,36 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 }
             });
         }
+    }
 
+    class Ascending implements Comparator<ChattingItem2> {
 
+        @Override
+        public int compare(ChattingItem2 o1, ChattingItem2 o2) {
+            return o2.getTime().compareTo(o1.getTime());
+        }
 
     }
+
+
+    public String formatTimeString(long regTime) {
+        long curTime = System.currentTimeMillis();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = "";
+        if (diffTime < BoardAdapter.TIME_MAXIMUM.SEC) {
+            msg = "방금 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.SEC) < BoardAdapter.TIME_MAXIMUM.MIN) {
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.MIN) < BoardAdapter.TIME_MAXIMUM.HOUR) {
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.HOUR) < BoardAdapter.TIME_MAXIMUM.DAY) {
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.DAY) < BoardAdapter.TIME_MAXIMUM.MONTH) {
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
+    }
+
 }
