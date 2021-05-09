@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,7 +92,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                             result.put("chatid", chatid);
                             result.put("id", userid);
-                            result.put("time", chatid);
+                            result.put("time", System.currentTimeMillis()+"");
                             result.put("contents", ct);
 
                             reference1.setValue(result);
@@ -287,8 +288,47 @@ public class ChattingActivity extends AppCompatActivity {
 
     }
 
-    private String makeTimeStamp(long in){
+    /*private String makeTimeStamp(long in){
         SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm:ss");
         return format.format(in);
+    }*/
+
+    private void currentUser(String userid){
+        SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+        editor.putString("currentuser", userid);
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        currentUser(userid);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+        currentUser("none");
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -93,4 +93,25 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
+
+    public String formatTimeString(long regTime) {
+        long curTime = System.currentTimeMillis();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = "";
+        if (diffTime < BoardAdapter.TIME_MAXIMUM.SEC) {
+            msg = "방금 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.SEC) < BoardAdapter.TIME_MAXIMUM.MIN) {
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.MIN) < BoardAdapter.TIME_MAXIMUM.HOUR) {
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.HOUR) < BoardAdapter.TIME_MAXIMUM.DAY) {
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.DAY) < BoardAdapter.TIME_MAXIMUM.MONTH) {
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
+    }
+
 }
