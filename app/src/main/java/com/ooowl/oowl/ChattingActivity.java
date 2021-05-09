@@ -65,6 +65,9 @@ public class ChattingActivity extends AppCompatActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
+
+
+
         input = findViewById(R.id.et_chat);
         send = findViewById(R.id.bt_send);
 
@@ -233,7 +236,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                             adapter = new ChattingAdapter(getApplicationContext(), list);
                             recyclerView.setAdapter(adapter);
-
+                            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
                         }
 
                         @Override
@@ -271,7 +274,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                     adapter = new ChattingAdapter(getApplicationContext(), list);
                     recyclerView.setAdapter(adapter);
-
+                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
                 }
 
                 @Override
