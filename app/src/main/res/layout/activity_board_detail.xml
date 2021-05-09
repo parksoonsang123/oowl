@@ -74,7 +74,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -94,56 +94,104 @@
                     android:layout_height="300dp"/>
 
 
-            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/btn1"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/btn1"/>
+
+                    <ImageView
+                        android:id="@+id/btn2"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/btn2"/>
+
+                    <ImageView
+                        android:id="@+id/btn3"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/btn2"/>
+
+                    <ImageView
+                        android:id="@+id/btn4"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/btn2"/>
+
+                    <ImageView
+                        android:id="@+id/btn5"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/btn2"/>
+
+                </LinearLayout>
+
+
+
+
+            </FrameLayout>
 
 
             <LinearLayout
-                android:background="@drawable/itemborder3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/itemborder3"
+                android:orientation="horizontal"
                 android:paddingHorizontal="10dp"
-                android:paddingVertical="20dp"
-                android:orientation="horizontal">
+                android:paddingVertical="20dp">
 
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/mypageimage"/>
-
+                    android:background="@drawable/mypageimage" />
 
 
                 <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginVertical="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginVertical="2dp"
+                    android:layout_marginLeft="10dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/detail_nick"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
+                        android:text="닉네임"
                         android:textColor="#000000"
                         android:textSize="20dp"
-                        android:text="닉네임"/>
+                        android:textStyle="bold" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/detail_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#939393"
-                        android:text="글쓴시간"/>
+                        android:text="글쓴시간"
+                        android:textColor="#939393" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -153,30 +201,28 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/heart"/>
+                            android:src="@drawable/heart" />
 
                         <TextView
                             android:id="@+id/detail_jjimcnt"
-                            android:layout_marginLeft="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
                             android:text="0"
-                            android:textColor="#FF5353"/>
+                            android:textColor="#FF5353" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
 
-
-
                 <LinearLayout
-                    android:layout_marginVertical="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginVertical="2dp"
+                    android:layout_marginLeft="40dp"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="40dp">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -186,8 +232,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#000000"
-                            android:text="배송 가능 여부"/>
+                            android:text="배송 가능 여부"
+                            android:textColor="#000000" />
 
 
                         <TextView
@@ -195,9 +241,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
+                            android:text="YES"
                             android:textColor="#000000"
-                            android:textStyle="bold"
-                            android:text="YES"/>
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -211,17 +257,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#000000"
-                            android:text="직거래 가능 여부"/>
+                            android:text="직거래 가능 여부"
+                            android:textColor="#000000" />
 
                         <TextView
                             android:id="@+id/tradeyesno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="#000000"
                             android:gravity="right"
-                            android:textStyle="bold"
-                            android:text="YES"/>
+                            android:text="YES"
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -235,17 +281,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#000000"
-                            android:text="가격 제안 가능 여부"/>
+                            android:text="가격 제안 가능 여부"
+                            android:textColor="#000000" />
 
                         <TextView
                             android:id="@+id/suggest"
-                            android:gravity="right"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="YES"
                             android:textColor="#000000"
-                            android:textStyle="bold"
-                            android:text="YES"/>
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -253,7 +299,6 @@
 
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"

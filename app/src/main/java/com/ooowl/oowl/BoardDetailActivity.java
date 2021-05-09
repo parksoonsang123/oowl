@@ -67,12 +67,20 @@ public class BoardDetailActivity extends AppCompatActivity {
 
     Button jjim;
 
+    ImageView[] btn = new ImageView[5];
+
     private ArrayList<UsersItem> Userlist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_detail);
+
+        btn[0] = findViewById(R.id.btn1);
+        btn[1] = findViewById(R.id.btn2);
+        btn[2] = findViewById(R.id.btn3);
+        btn[3] = findViewById(R.id.btn4);
+        btn[4] = findViewById(R.id.btn5);
 
         mAuth = FirebaseAuth.getInstance();
         userid = mAuth.getCurrentUser().getUid();
@@ -310,7 +318,10 @@ public class BoardDetailActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 PostItem item = snapshot.getValue(PostItem.class);
                 nick.setText(item.getNickname());
-                time.setText(item.getWritetime());
+
+                Long t = Long.parseLong(item.getWritetime());
+                time.setText(formatTimeString(t));
+
                 jjimcnt.setText(item.getJjimcnt());
 
                 if(item.getTransyesno().equals("YES")){
@@ -356,17 +367,83 @@ public class BoardDetailActivity extends AppCompatActivity {
                 viewPager = findViewById(R.id.detail_viewpager);
                 ImageFragmentAdapter fragmentAdapter = new ImageFragmentAdapter(getSupportFragmentManager());
 
+                final int size = item.getImageurilist().size();
 
-                for(int i=0;i<item.getImageurilist().size();i++){
-                    ImageFragment imageFragment = new ImageFragment();
+                if(size == 1){
+                    btn[0].setVisibility(View.GONE);
+                    btn[1].setVisibility(View.GONE);
+                    btn[2].setVisibility(View.GONE);
+                    btn[3].setVisibility(View.GONE);
+                    btn[4].setVisibility(View.GONE);
+                }
+                else if(size == 2){
+                    btn[0].setVisibility(View.VISIBLE);
+                    btn[1].setVisibility(View.VISIBLE);
+                    btn[2].setVisibility(View.GONE);
+                    btn[3].setVisibility(View.GONE);
+                    btn[4].setVisibility(View.GONE);
+                }
+                else if(size == 3){
+                    btn[0].setVisibility(View.VISIBLE);
+                    btn[1].setVisibility(View.VISIBLE);
+                    btn[2].setVisibility(View.VISIBLE);
+                    btn[3].setVisibility(View.GONE);
+                    btn[4].setVisibility(View.GONE);
+                }
+                else if(size == 4){
+                    btn[0].setVisibility(View.VISIBLE);
+                    btn[1].setVisibility(View.VISIBLE);
+                    btn[2].setVisibility(View.VISIBLE);
+                    btn[3].setVisibility(View.VISIBLE);
+                    btn[4].setVisibility(View.GONE);
+                }
+                else if(size == 5){
+                    btn[0].setVisibility(View.VISIBLE);
+                    btn[1].setVisibility(View.VISIBLE);
+                    btn[2].setVisibility(View.VISIBLE);
+                    btn[3].setVisibility(View.VISIBLE);
+                    btn[4].setVisibility(View.VISIBLE);
+                }
+
+                ImageFragment[] imageFragment = new ImageFragment[5];
+                for(int i=0;i<size;i++){
+                    imageFragment[i] = new ImageFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("imgRes", item.getImageurilist().get(i));
-                    imageFragment.setArguments(bundle);
-                    fragmentAdapter.addItem(imageFragment);
+                    imageFragment[i].setArguments(bundle);
+                    fragmentAdapter.addItem(imageFragment[i]);
                 }
                 fragmentAdapter.notifyDataSetChanged();
 
                 viewPager.setAdapter(fragmentAdapter);
+
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+
+                        for(int i=0;i<size;i++){
+                            if(i != position){
+                                btn[i].setBackgroundResource(R.drawable.btn2);
+                            }
+                            else{
+                                btn[i].setBackgroundResource(R.drawable.btn1);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+
+
 
 
             }
@@ -504,6 +581,26 @@ public class BoardDetailActivity extends AppCompatActivity {
         reference7 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
         reference7.removeValue();
         finish();
+    }
+
+    public String formatTimeString(long regTime) {
+        long curTime = System.currentTimeMillis();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = "";
+        if (diffTime < BoardAdapter.TIME_MAXIMUM.SEC) {
+            msg = "방금 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.SEC) < BoardAdapter.TIME_MAXIMUM.MIN) {
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.MIN) < BoardAdapter.TIME_MAXIMUM.HOUR) {
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.HOUR) < BoardAdapter.TIME_MAXIMUM.DAY) {
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardAdapter.TIME_MAXIMUM.DAY) < BoardAdapter.TIME_MAXIMUM.MONTH) {
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
     }
 
 }

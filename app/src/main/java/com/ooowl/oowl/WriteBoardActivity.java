@@ -247,8 +247,11 @@ public class WriteBoardActivity extends AppCompatActivity {
                         }
 
 
-                    } else {
-                        Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
+                    } else if(list.size() < 2) {
+                        Toast.makeText(WriteBoardActivity.this, "사진을 5개 이하로 올려주세요!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(WriteBoardActivity.this, "사진은 5개 이하로 올려주세요!", Toast.LENGTH_SHORT).show();
                     }
                 } else {   //수정하기
 
@@ -344,8 +347,11 @@ public class WriteBoardActivity extends AppCompatActivity {
                                     }
                                 }
 
-                            } else {
-                                Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
+                            } else if(list.size() < 2) {
+                                Toast.makeText(WriteBoardActivity.this, "사진을 5개 이하로 올려주세요!", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(WriteBoardActivity.this, "사진은 5개 이하로 올려주세요!", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -557,7 +563,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
                 result.put("title", writetitle.getText().toString());
                 result.put("contents", writecontents.getText().toString());
-                result.put("writetime", makeTimeStamp(time));
+                result.put("writetime", System.currentTimeMillis()+"");
                 result.put("jjimcnt", "0");
                 result.put("postid", postid2);
                 result.put("userid", userid);
@@ -615,7 +621,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
                     result.put("title", writetitle.getText().toString());
                     result.put("contents", writecontents.getText().toString());
-                    result.put("writetime", makeTimeStamp(time));
+                    result.put("writetime", System.currentTimeMillis()+"");
                     result.put("jjimcnt", "0");
                     result.put("postid", postid2);
                     result.put("userid", userid);
@@ -648,7 +654,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
             result.put("title", writetitle.getText().toString());
             result.put("contents", writecontents.getText().toString());
-            result.put("writetime", makeTimeStamp(time));
+            result.put("writetime", System.currentTimeMillis()+"");
             result.put("jjimcnt", jjimcnt);
             result.put("postid", postid);
             result.put("userid", userid);
@@ -689,8 +695,11 @@ public class WriteBoardActivity extends AppCompatActivity {
         storageRef.delete();
     }
 
-    private String makeTimeStamp(long in) {
+    /*private String makeTimeStamp(long in) {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm:ss");
         return format.format(in);
-    }
+    }*/
+
+
+
 }

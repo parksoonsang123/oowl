@@ -1,5 +1,7 @@
 package com.ooowl.oowl;
 
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,9 +17,11 @@ public class ImageFragmentAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
     @NonNull
     @Override
     public Fragment getItem(int position) {
+
         return fragments.get(position);
     }
 
