@@ -58,10 +58,17 @@ public class WriteBoardActivity extends AppCompatActivity {
     RadioGroup rg1;
     RadioGroup rg2;
     RadioGroup rg3;
-    RadioButton rb0;
     RadioButton rb1;
     RadioButton rb2;
     RadioButton rb3;
+
+    RadioButton rb11;
+    RadioButton rb12;
+    RadioButton rb21;
+    RadioButton rb22;
+    RadioButton rb31;
+    RadioButton rb32;
+
 
     EditText address;
 
@@ -92,6 +99,15 @@ public class WriteBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_board);
 
+        rb11 = findViewById(R.id.yes3);
+        rb12 = findViewById(R.id.no3);
+
+        rb21 = findViewById(R.id.yes1);
+        rb22 = findViewById(R.id.no1);
+
+        rb31 = findViewById(R.id.yes2);
+        rb32 = findViewById(R.id.no2);
+
         Intent intent = getIntent();
         final String postid = intent.getStringExtra("postid");
 
@@ -101,10 +117,9 @@ public class WriteBoardActivity extends AppCompatActivity {
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress == 0){
+                if (progress == 0) {
                     price.setText("₩0");
-                }
-                else{
+                } else {
                     price.setText("₩" + String.valueOf(progress * 10) + "00");
                 }
 
@@ -153,15 +168,13 @@ public class WriteBoardActivity extends AppCompatActivity {
                 int select2 = rg2.getCheckedRadioButtonId();
                 int select3 = rg3.getCheckedRadioButtonId();
 
-                if(select1 == -1){
+                if (select1 == -1) {
                     Toast.makeText(WriteBoardActivity.this, "가격 제안 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else if(select2 == -1){
+                } else if (select2 == -1) {
                     Toast.makeText(WriteBoardActivity.this, "배송 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else if(select3 == -1){
+                } else if (select3 == -1) {
                     Toast.makeText(WriteBoardActivity.this, "직거래 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -171,8 +184,8 @@ public class WriteBoardActivity extends AppCompatActivity {
                 list2.clear();
                 list3.clear();
 
-                if(postid == null){ //글쓰기
-                    if(list.size() >= 2){
+                if (postid == null) { //글쓰기
+                    if (list.size() >= 2) {
                         storage = FirebaseStorage.getInstance();
                         StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
 
@@ -180,11 +193,11 @@ public class WriteBoardActivity extends AppCompatActivity {
                         progressDialog.setTitle("이미지 업로드");
                         progressDialog.show();
 
-                        for(int i=0;i<list.size()-1;i++){
+                        for (int i = 0; i < list.size() - 1; i++) {
                             imagename = System.currentTimeMillis();
-                            list3.add(imagename+"");
+                            list3.add(imagename + "");
                             Uri file = list.get(i).getImageuri();
-                            final StorageReference riversRef = storageRef.child("images/"+imagename);
+                            final StorageReference riversRef = storageRef.child("images/" + imagename);
                             UploadTask uploadTask = riversRef.putFile(file);
                             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
@@ -206,7 +219,7 @@ public class WriteBoardActivity extends AppCompatActivity {
                             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                 @Override
                                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                    if(!task.isSuccessful()){
+                                    if (!task.isSuccessful()) {
                                         throw task.getException();
                                     }
 
@@ -215,19 +228,18 @@ public class WriteBoardActivity extends AppCompatActivity {
                             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
 
-                                        cnt++;
+
                                         Uri downloadUri = task.getResult();
                                         list2.add(downloadUri.toString());
+                                        cnt++;
 
-
-                                        if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                        if (cnt == list.size() - 1) { //이미지파일 업로드 완료 후 동작
                                             progressDialog.dismiss();
-                                            postimage(postid);
+                                            postimage2(postid);
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         //실패
                                     }
                                 }
@@ -235,12 +247,10 @@ public class WriteBoardActivity extends AppCompatActivity {
                         }
 
 
-                    }
-                    else{
+                    } else {
                         Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{   //수정하기
+                } else {   //수정하기
 
                     remainlist.clear();
                     removelist.clear();
@@ -248,11 +258,11 @@ public class WriteBoardActivity extends AppCompatActivity {
                     databaseReference4.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            PostItem item = snapshot.getValue(PostItem.class);
-                            for(int k=0;k<item.getImagenamelist().size();k++){
+                            final PostItem item = snapshot.getValue(PostItem.class);
+                            for (int k = 0; k < item.getImagenamelist().size(); k++) {
                                 remainlist.add(item.getImagenamelist().get(k));
                             }
-                            if(list.size() >= 2){   //이미지 파일 있을 때
+                            if (list.size() >= 2) {   //이미지 파일 있을 때
                                 storage = FirebaseStorage.getInstance();
                                 StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
 
@@ -260,13 +270,13 @@ public class WriteBoardActivity extends AppCompatActivity {
                                 progressDialog.setTitle("이미지 업로드");
                                 progressDialog.show();
 
-                                for(int i = 0; i < list.size() - 1; i++){
+                                for (int i = 0; i < list.size() - 1; i++) {
                                     imagename = System.currentTimeMillis();
 
-                                    if(list.get(i).getImageuri().toString().contains("http")){  //기존 이미지
+                                    if (list.get(i).getImageuri().toString().contains("http")) {  //기존 이미지
                                         int index = 0;
-                                        for(int j=0;j<item.getImageurilist().size();j++){
-                                            if(list.get(i).getImageuri().toString().equals(item.getImageurilist().get(j))){
+                                        for (int j = 0; j < item.getImageurilist().size(); j++) {
+                                            if (list.get(i).getImageuri().toString().equals(item.getImageurilist().get(j))) {
                                                 index = j;
                                                 removelist.add(index);
                                                 break;
@@ -277,16 +287,15 @@ public class WriteBoardActivity extends AppCompatActivity {
                                         list2.add(item.getImageurilist().get(index));
                                         cnt++;
 
-                                        if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                        if (cnt == list.size() - 1) { //이미지파일 업로드 완료 후 동작
                                             progressDialog.dismiss();
-                                            postimage(postid);
+                                            postimage(postid, item.getJjimcnt(), item.getNickname());
                                         }
-                                    }
-                                    else{   //새로운 이미지
-                                        list3.add(imagename+"");
+                                    } else {   //새로운 이미지
+                                        list3.add(imagename + "");
                                         Uri file = list.get(i).getImageuri();
                                         //StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
-                                        final StorageReference riversRef = storageRef.child("images/"+imagename);
+                                        final StorageReference riversRef = storageRef.child("images/" + imagename);
                                         UploadTask uploadTask = riversRef.putFile(file);
                                         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
@@ -308,7 +317,7 @@ public class WriteBoardActivity extends AppCompatActivity {
                                         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                             @Override
                                             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                                if(!task.isSuccessful()){
+                                                if (!task.isSuccessful()) {
                                                     throw task.getException();
                                                 }
 
@@ -317,17 +326,17 @@ public class WriteBoardActivity extends AppCompatActivity {
                                         }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Uri> task) {
-                                                if(task.isSuccessful()){
-                                                    cnt++;
+                                                if (task.isSuccessful()) {
+
                                                     Uri downloadUri = task.getResult();
                                                     list2.add(downloadUri.toString());
+                                                    cnt++;
 
-                                                    if(cnt == list.size() - 1){ //이미지파일 업로드 완료 후 동작
+                                                    if (cnt == list.size() - 1) { //이미지파일 업로드 완료 후 동작
                                                         progressDialog.dismiss();
-                                                        postimage(postid);
+                                                        postimage(postid, item.getJjimcnt(), item.getNickname());
                                                     }
-                                                }
-                                                else{
+                                                } else {
                                                     //실패
                                                 }
                                             }
@@ -335,6 +344,8 @@ public class WriteBoardActivity extends AppCompatActivity {
                                     }
                                 }
 
+                            } else {
+                                Toast.makeText(WriteBoardActivity.this, "사진을 올려주세요!", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -346,11 +357,6 @@ public class WriteBoardActivity extends AppCompatActivity {
                     });
 
 
-
-
-
-
-
                 }
 
 
@@ -358,8 +364,7 @@ public class WriteBoardActivity extends AppCompatActivity {
         });
 
 
-
-        if(postid == null){
+        if (postid == null) {
             list.add(new WriteBoardItem(null, Code.ViewType.SECOND));
             adapter = new WriteBoardAdapter(list, this);
             adapter.setOnPlusClickListener(new WriteBoardAdapter.OnPlusClickListener() {
@@ -381,8 +386,7 @@ public class WriteBoardActivity extends AppCompatActivity {
             });
 
             recyclerView.setAdapter(adapter);
-        }
-        else{   //수정
+        } else {   //수정
             databaseReference2 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -391,8 +395,36 @@ public class WriteBoardActivity extends AppCompatActivity {
 
                     writetitle.setText(item.getTitle());
                     writecontents.setText(item.getContents());
+                    address.setText(item.getAddress());
 
-                    for(int i=0;i<item.getImageurilist().size();i++){
+                    if(item.getSuggest().equals("YES")){
+                        rb11.setChecked(true);
+                    }
+                    else{
+                        rb12.setChecked(true);
+                    }
+
+                    if(item.getTransyesno().equals("YES")){
+                        rb21.setChecked(true);
+                    }
+                    else{
+                        rb22.setChecked(true);
+                    }
+
+                    if(item.getTradeyesno().equals("YES")){
+                        rb31.setChecked(true);
+                    }
+                    else{
+                        rb32.setChecked(true);
+                    }
+
+                    String pg = item.getPrice();
+                    String pg2 = pg.substring(1, pg.length()-3);
+                    int pg3 = Integer.parseInt(pg2);
+                    sb.setProgress(pg3);
+                    price.setText(pg);
+
+                    for (int i = 0; i < item.getImageurilist().size(); i++) {
                         Uri uri = Uri.parse(item.getImageurilist().get(i));
                         list.add(new WriteBoardItem(uri, Code.ViewType.FIRST));
                     }
@@ -420,6 +452,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
                     recyclerView.setAdapter(adapter);
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
@@ -428,18 +461,16 @@ public class WriteBoardActivity extends AppCompatActivity {
         }
 
 
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //이미지 선택 시 실행
-        if(requestCode == 0 && resultCode == RESULT_OK){
-            if(data.getClipData() == null && data.getData() != null){   //이미지 1개 선택
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            if (data.getClipData() == null && data.getData() != null) {   //이미지 1개 선택
                 int lastindex = list.size() - 1;
-                if(lastindex != -1){
+                if (lastindex != -1) {
                     list.remove(lastindex);
                 }
                 list.add(new WriteBoardItem(data.getData(), Code.ViewType.FIRST));
@@ -464,14 +495,13 @@ public class WriteBoardActivity extends AppCompatActivity {
                 });
                 recyclerView.setAdapter(adapter);
 
-            }
-            else{   //이미지 2개이상 선택
+            } else {   //이미지 2개이상 선택
                 int lastindex = list.size() - 1;
-                if(lastindex != -1){
+                if (lastindex != -1) {
                     list.remove(lastindex);
                 }
                 ClipData clipData = data.getClipData();
-                for(int i = 0;i<clipData.getItemCount();i++){
+                for (int i = 0; i < clipData.getItemCount(); i++) {
                     list.add(new WriteBoardItem(clipData.getItemAt(i).getUri(), Code.ViewType.FIRST));
                 }
                 list.add(new WriteBoardItem(null, Code.ViewType.SECOND));
@@ -499,7 +529,63 @@ public class WriteBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void postimage(String postid){
+    private void postimage2(String postid) {
+        final String userid = mAuth.getCurrentUser().getUid();
+
+        int select1 = rg1.getCheckedRadioButtonId();
+        int select2 = rg2.getCheckedRadioButtonId();
+        int select3 = rg3.getCheckedRadioButtonId();
+
+        rb1 = findViewById(select1);
+        rb2 = findViewById(select2);
+        rb3 = findViewById(select3);
+
+        database = FirebaseDatabase.getInstance();
+
+        databaseReference2 = database.getReference("Users").child(userid);
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+
+                databaseReference = database.getReference("Post").push();
+                String postid2 = databaseReference.getKey();
+
+                time = System.currentTimeMillis();
+
+                HashMap result = new HashMap<>();
+
+                result.put("title", writetitle.getText().toString());
+                result.put("contents", writecontents.getText().toString());
+                result.put("writetime", makeTimeStamp(time));
+                result.put("jjimcnt", "0");
+                result.put("postid", postid2);
+                result.put("userid", userid);
+                result.put("nickname", item.getNickname());
+                result.put("imageurilist", list2);
+                result.put("imagenamelist", list3);
+                result.put("transyesno", rb1.getText().toString());
+                result.put("tradeyesno", rb2.getText().toString());
+                result.put("suggest", rb3.getText().toString());
+                result.put("address", address.getText().toString());
+                result.put("price", price.getText().toString());
+
+
+                databaseReference.setValue(result);
+                finish();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+    private void postimage(String postid, String jjimcnt, String nickname) {
 
         final String userid = mAuth.getCurrentUser().getUid();
 
@@ -513,7 +599,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
 
-        if(postid == null){
+        if (postid == null) {
             databaseReference2 = database.getReference("Users").child(userid);
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -553,8 +639,7 @@ public class WriteBoardActivity extends AppCompatActivity {
 
                 }
             });
-        }
-        else{
+        } else {
             databaseReference = database.getReference("Post").child(postid);
 
             time = System.currentTimeMillis();
@@ -564,6 +649,10 @@ public class WriteBoardActivity extends AppCompatActivity {
             result.put("title", writetitle.getText().toString());
             result.put("contents", writecontents.getText().toString());
             result.put("writetime", makeTimeStamp(time));
+            result.put("jjimcnt", jjimcnt);
+            result.put("postid", postid);
+            result.put("userid", userid);
+            result.put("nickname", nickname);
             result.put("imageurilist", list2);
             result.put("imagenamelist", list3);
             result.put("transyesno", rb1.getText().toString());
@@ -578,15 +667,15 @@ public class WriteBoardActivity extends AppCompatActivity {
 
         }
 
-        for(int i=0;i<remainlist.size();i++){
+        for (int i = 0; i < remainlist.size(); i++) {
             int check = -1;
-            for(int j=0;j<removelist.size();j++){
-                if(i == removelist.get(j)){
+            for (int j = 0; j < removelist.size(); j++) {
+                if (i == removelist.get(j)) {
                     check = 1;
                     break;
                 }
             }
-            if(check == -1){
+            if (check == -1) {
                 imagedelete2(remainlist.get(i));
             }
         }
@@ -594,13 +683,13 @@ public class WriteBoardActivity extends AppCompatActivity {
 
     }
 
-    private void imagedelete2(String imagename){
+    private void imagedelete2(String imagename) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("images/"+imagename);
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("images/" + imagename);
         storageRef.delete();
     }
 
-    private String makeTimeStamp(long in){
+    private String makeTimeStamp(long in) {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm:ss");
         return format.format(in);
     }
