@@ -128,6 +128,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatList");
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -142,8 +143,9 @@ public class BoardDetailActivity extends AppCompatActivity {
                         }
 
                         if(flag == -1){
+
                             DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("ChatList").push();
-                            String chatid = reference1.getKey();
+                            final String chatid = reference1.getKey();
 
                             HashMap result = new HashMap<>();
 
@@ -155,9 +157,12 @@ public class BoardDetailActivity extends AppCompatActivity {
                             reference1.setValue(result);
 
 
+
                             Intent intent1 = new Intent(BoardDetailActivity.this, ChattingActivity.class);
                             intent1.putExtra("postid", postid);
                             intent1.putExtra("chatid", chatid);
+                            intent1.putExtra("sellid", postuserid);
+                            intent1.putExtra("myid", userid);
                             intent1.putExtra("where", "1");
                             startActivity(intent1);
                             finish();

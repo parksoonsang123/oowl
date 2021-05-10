@@ -68,6 +68,7 @@ public class ChattingActivity extends AppCompatActivity {
 
     Button out;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,147 +197,150 @@ public class ChattingActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Post").child(postid);
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         final PostItem item = snapshot.getValue(PostItem.class);
                         final String ct = input.getText().toString();
-
                         if(ct.equals("") || ct == null){
                             Toast.makeText(ChattingActivity.this, "메세지를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        else{
-                            DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
-                            reference2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    ChatListItem item1 = snapshot.getValue(ChatListItem.class);
 
-                                    String s1 = item1.getMyid();
-                                    String s2 = item1.getSellid();
+                        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
+                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                ChatListItem item1 = snapshot.getValue(ChatListItem.class);
 
-                                    if(s1.equals(userid)){
-                                        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s2);
-                                        reference3.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                final Token item2 = snapshot.getValue(Token.class);
+                                String s1 = item1.getMyid();
+                                String s2 = item1.getSellid();
 
-                                                //채팅보냈을때 알림
-                                                Runnable runnable = new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                                                        apiService.sendNotification(new NotificationData(new SendData(ct, postid, chatid, userid), item2.getToken()))
-                                                                .enqueue(new Callback<MyResponse>() {
-                                                                    @Override
-                                                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                                                        if(response.code() == 200){
-                                                                            if(response.body().success == 1){
-                                                                                Log.e("Notification", "success");
-                                                                            }
+                                if(s1.equals(userid)){
+                                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s2);
+                                    reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            final Token item2 = snapshot.getValue(Token.class);
+
+                                            //채팅보냈을때 알림
+                                            Runnable runnable = new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                                                    apiService.sendNotification(new NotificationData(new SendData(ct, postid, chatid, userid), item2.getToken()))
+                                                            .enqueue(new Callback<MyResponse>() {
+                                                                @Override
+                                                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                                                    if(response.code() == 200){
+                                                                        if(response.body().success == 1){
+                                                                            Log.e("Notification", "success");
                                                                         }
                                                                     }
+                                                                }
 
-                                                                    @Override
-                                                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                                                                @Override
+                                                                public void onFailure(Call<MyResponse> call, Throwable t) {
 
-                                                                    }
-                                                                });
-                                                    }
-                                                };
+                                                                }
+                                                            });
+                                                }
+                                            };
 
-                                                Thread tr = new Thread(runnable);
-                                                tr.start();
-                                            }
+                                            Thread tr = new Thread(runnable);
+                                            tr.start();
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
+                                        }
 
-                                            }
-                                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
+                                        }
+                                    });
 
-                                        HashMap result = new HashMap<>();
+                                    DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
 
-                                        result.put("chatid", chatid);
-                                        result.put("senderid", userid);
-                                        result.put("receiverid", s2);
-                                        result.put("time", System.currentTimeMillis()+"");
-                                        result.put("contents", ct);
-                                        result.put("isseen", false);
+                                    HashMap result = new HashMap<>();
 
-                                        reference1.setValue(result);
+                                    result.put("chatid", chatid);
+                                    result.put("senderid", userid);
+                                    result.put("receiverid", s2);
+                                    result.put("time", System.currentTimeMillis()+"");
+                                    result.put("contents", ct);
+                                    result.put("isseen", false);
 
-                                        input.setText("");
-                                    }
-                                    else if(s2.equals(userid)){
-                                        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s1);
-                                        reference3.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                final Token item2 = snapshot.getValue(Token.class);
+                                    reference1.setValue(result);
 
-                                                //채팅보냈을때 알림
-                                                Runnable runnable = new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                                                        apiService.sendNotification(new NotificationData(new SendData(ct, postid, chatid, userid), item2.getToken()))
-                                                                .enqueue(new Callback<MyResponse>() {
-                                                                    @Override
-                                                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                                                        if(response.code() == 200){
-                                                                            if(response.body().success == 1){
-                                                                                Log.e("Notification", "success");
-                                                                            }
+                                    input.setText("");
+                                }
+                                else if(s2.equals(userid)){
+                                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s1);
+                                    reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            final Token item2 = snapshot.getValue(Token.class);
+
+                                            //채팅보냈을때 알림
+                                            Runnable runnable = new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                                                    apiService.sendNotification(new NotificationData(new SendData(ct, postid, chatid, userid), item2.getToken()))
+                                                            .enqueue(new Callback<MyResponse>() {
+                                                                @Override
+                                                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                                                    if(response.code() == 200){
+                                                                        if(response.body().success == 1){
+                                                                            Log.e("Notification", "success");
                                                                         }
                                                                     }
+                                                                }
 
-                                                                    @Override
-                                                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                                                                @Override
+                                                                public void onFailure(Call<MyResponse> call, Throwable t) {
 
-                                                                    }
-                                                                });
-                                                    }
-                                                };
+                                                                }
+                                                            });
+                                                }
+                                            };
 
 
-                                                Thread tr = new Thread(runnable);
-                                                tr.start();
-                                            }
+                                            Thread tr = new Thread(runnable);
+                                            tr.start();
+                                        }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                            }
-                                        });
+                                        }
+                                    });
 
-                                        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
+                                    DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
 
-                                        HashMap result = new HashMap<>();
+                                    HashMap result = new HashMap<>();
 
-                                        result.put("chatid", chatid);
-                                        result.put("senderid", userid);
-                                        result.put("receiverid", s1);
-                                        result.put("time", System.currentTimeMillis()+"");
-                                        result.put("contents", ct);
-                                        result.put("isseen", false);
+                                    result.put("chatid", chatid);
+                                    result.put("senderid", userid);
+                                    result.put("receiverid", s1);
+                                    result.put("time", System.currentTimeMillis()+"");
+                                    result.put("contents", ct);
+                                    result.put("isseen", false);
 
-                                        reference1.setValue(result);
+                                    reference1.setValue(result);
 
-                                        input.setText("");
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                    input.setText("");
 
                                 }
-                            });
-                        }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                     }
 
@@ -345,6 +349,8 @@ public class ChattingActivity extends AppCompatActivity {
 
                     }
                 });
+
+
             }
         });
 
@@ -355,7 +361,6 @@ public class ChattingActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     PostItem item = snapshot.getValue(PostItem.class);
-                    String sellid2 = item.getUserid();
 
                     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid);
                     reference1.addValueEventListener(new ValueEventListener() {
@@ -422,15 +427,13 @@ public class ChattingActivity extends AppCompatActivity {
                 }
             });
 
+
         }
-
-
 
         seenMessage(userid, postid, chatid);
 
-
-
     }
+
 
     /*private String makeTimeStamp(long in){
         SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm:ss");

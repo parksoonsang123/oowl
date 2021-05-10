@@ -60,7 +60,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                     holder.nickname.setText(item.getNickname());
 
                     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
-                    reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    reference1.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             list.clear();
@@ -69,12 +69,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                                 list.add(item2);
                             }
 
-                            Collections.sort(list, new Ascending());
+                            if(list.size()>0){
+                                Collections.sort(list, new Ascending());
 
-                            holder.contents.setText(list.get(0).getContents());
+                                holder.contents.setText(list.get(0).getContents());
 
-                            Long t = Long.parseLong(list.get(0).getTime());
-                            holder.time.setText(formatTimeString(t));
+                                Long t = Long.parseLong(list.get(0).getTime());
+                                holder.time.setText(formatTimeString(t));
+                            }
+
                         }
 
                         @Override
@@ -99,7 +102,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                     holder.nickname.setText(item.getNickname());
 
                     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
-                    reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    reference1.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             list.clear();
@@ -107,13 +110,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                                 ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
                                 list.add(item2);
                             }
+                            if(list.size()>0){
+                                Collections.sort(list, new Ascending());
 
-                            Collections.sort(list, new Ascending());
+                                holder.contents.setText(list.get(0).getContents());
 
-                            holder.contents.setText(list.get(0).getContents());
+                                Long t = Long.parseLong(list.get(0).getTime());
+                                holder.time.setText(formatTimeString(t));
+                            }
 
-                            Long t = Long.parseLong(list.get(0).getTime());
-                            holder.time.setText(formatTimeString(t));
                         }
 
                         @Override
