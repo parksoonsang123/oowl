@@ -2,10 +2,12 @@ package com.ooowl.oowl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
@@ -64,6 +66,7 @@ public class ChattingActivity extends AppCompatActivity {
     TextView title;
     TextView price;
 
+    Button out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,40 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        out = findViewById(R.id.chatting_out);
+        out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.MyDialogTheme);
+                builder.setMessage("채팅방을 나가시겠습니까?");
+
+                builder.setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
+                                reference.removeValue();
+
+                                DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid);
+                                reference2.removeValue();
+
+                                finish();
+
+
+                            }
+                        });
+                builder.setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                builder.show();
             }
         });
 
