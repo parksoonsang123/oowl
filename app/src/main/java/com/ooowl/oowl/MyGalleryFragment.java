@@ -34,6 +34,8 @@ public class MyGalleryFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private TextView mg_id;
     private TextView jjimcnt;
+    private TextView num_follower;
+    private TextView num_following;
 
     String userid;
 
@@ -55,6 +57,9 @@ public class MyGalleryFragment extends Fragment {
         userid = mAuth.getUid();
         mg_id = view.findViewById(R.id.mg_id);
         jjimcnt = view.findViewById(R.id.num_jjim);
+
+        num_follower = view.findViewById(R.id.num_follower);
+        num_following = view.findViewById(R.id.num_following);
 
 
         database = FirebaseDatabase.getInstance();
@@ -86,13 +91,51 @@ public class MyGalleryFragment extends Fragment {
         });
 
 
+        //내가 팔로잉
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Follow").child(userid);
+        reference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int cnt = 0;
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    if(snapshot1 != null){
+                        cnt++;
+                    }
+                }
+                num_following.setText(cnt+"");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        //나를 팔로잉
+        DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("Follower").child(userid);
+        reference4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int cnt = 0;
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    if(snapshot1 != null){
+                        cnt++;
+                    }
+                }
+                num_follower.setText(cnt+"");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         return view;
     }
 
-    /*public void store(View view) {
-    }
 
-    public void follwer(View view) {
-    }*/
+
 
 }

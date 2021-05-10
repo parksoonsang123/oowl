@@ -33,7 +33,6 @@ public class BoardDetailActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     String userid;
-    String yourid;
 
     DatabaseReference reference;
     DatabaseReference reference2;
@@ -72,6 +71,8 @@ public class BoardDetailActivity extends AppCompatActivity {
 
     private ArrayList<UsersItem> Userlist = new ArrayList<>();
 
+    ImageView profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +90,6 @@ public class BoardDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String postid = intent.getStringExtra("pid");
         final String postuserid = intent.getStringExtra("uid");
-        yourid = postid;
 
 
 
@@ -127,6 +127,22 @@ public class BoardDetailActivity extends AppCompatActivity {
         }
 
 
+        profile = findViewById(R.id.your_profile);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1;
+                if(!postuserid.equals(userid)) {
+                    intent1 = new Intent(BoardDetailActivity.this, YourGallery.class);
+                    intent1.putExtra("your_id", postuserid);
+                    startActivity(intent1);
+                }
+                else{   //마이 갤러리 프래그먼트로 이동
+
+                }
+            }
+        });
+
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,8 +173,6 @@ public class BoardDetailActivity extends AppCompatActivity {
                             result.put("myid", userid);
 
                             reference1.setValue(result);
-
-
 
                             Intent intent1 = new Intent(BoardDetailActivity.this, ChattingActivity.class);
                             intent1.putExtra("postid", postid);
@@ -238,58 +252,51 @@ public class BoardDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 reference2 = FirebaseDatabase.getInstance().getReference("JJim").child(userid).child(postid);
+                reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        JJimItem item = snapshot.getValue(JJimItem.class);
 
-                if(reference2 == null){//찜한적 없음
-                    reference3 = FirebaseDatabase.getInstance().getReference("JJim").child(userid).child(postid);
-                    HashMap result = new HashMap<>();
-                    result.put("press", "1");
-                    reference3.setValue(result);
+                        if(item == null){//찜한적없음
+                            HashMap result = new HashMap<>();
+                            result.put("press", "1");
+                            reference2.setValue(result);
 
-                    jjim.setBackgroundResource(R.drawable.heart);
-                    jjimplus(postid);
-                }
-                else{
-                   reference2.addListenerForSingleValueEvent(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            JJimItem item = snapshot.getValue(JJimItem.class);
+                            jjim.setBackgroundResource(R.drawable.heart);
+                            jjimplus(postid);
+                        }
+                        else{
+                            reference2.removeValue();
 
-                            if(item == null){
+                            jjim.setBackgroundResource(R.drawable.heart2);
+                            jjimminus(postid);
+
+                            /*if(item.getPress().equals("1")){
+                                HashMap result = new HashMap<>();
+                                result.put("press", "0");
+                                reference2.setValue(result);
+
+                                jjim.setBackgroundResource(R.drawable.heart2);
+                                jjimminus(postid);
+                            }
+                            else{
                                 HashMap result = new HashMap<>();
                                 result.put("press", "1");
                                 reference2.setValue(result);
 
                                 jjim.setBackgroundResource(R.drawable.heart);
                                 jjimplus(postid);
-                            }
-                            else{
-                                if(item.getPress().equals("1")){
-                                    HashMap result = new HashMap<>();
-                                    result.put("press", "0");
-                                    reference2.setValue(result);
-
-                                    jjim.setBackgroundResource(R.drawable.heart2);
-                                    jjimminus(postid);
-                                }
-                                else{
-                                    HashMap result = new HashMap<>();
-                                    result.put("press", "1");
-                                    reference2.setValue(result);
-
-                                    jjim.setBackgroundResource(R.drawable.heart);
-                                    jjimplus(postid);
-                                }
-                            }
+                            }*/
+                        }
 
 
-                       }
+                    }
 
-                       @Override
-                       public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                       }
-                   });
-                }
+                    }
+                });
             }
         });
 
@@ -303,12 +310,13 @@ public class BoardDetailActivity extends AppCompatActivity {
                     jjim.setBackgroundResource(R.drawable.heart2);
                 }
                 else{
-                    if(item.getPress().equals("1")){
+                    jjim.setBackgroundResource(R.drawable.heart);
+                    /*if(item.getPress().equals("1")){
                         jjim.setBackgroundResource(R.drawable.heart);
                     }
                     else{
                         jjim.setBackgroundResource(R.drawable.heart2);
-                    }
+                    }*/
                 }
             }
 
@@ -610,20 +618,6 @@ public class BoardDetailActivity extends AppCompatActivity {
         return msg;
     }
 
-    public void togallery(View view) {
-
-        Intent intent1;
-
-        if(yourid == userid)
-        {
-            intent1 = new Intent(BoardDetailActivity.this, MyGalleryFragment.class);
-        }
-        else {
-            intent1 = new Intent(BoardDetailActivity.this, YourGallery.class);
-            intent1.putExtra("your_id", yourid);
-        }
-        startActivity(intent1);
-    }
 }
 
 
