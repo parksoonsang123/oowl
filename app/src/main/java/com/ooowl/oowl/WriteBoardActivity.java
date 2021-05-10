@@ -94,6 +94,13 @@ public class WriteBoardActivity extends AppCompatActivity {
     long time;
     long imagename;
 
+    private static final int PICK_FROM_CAMEFA=0;
+    private static final int PICK_FROM_ALBUM=1;
+    private static final int CROP_FROM_CAMEFA=2;
+    private static final int CROP_FROM_ALBUM=3;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

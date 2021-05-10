@@ -1,17 +1,12 @@
 package com.ooowl.oowl;
 
-import android.graphics.Rect;
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Intent;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +16,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-public class MyGalleryFragment extends Fragment {
+public class YourGallery extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -33,26 +30,25 @@ public class MyGalleryFragment extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private TextView mg_id;
-    String userid;
-
+    private String yourid;
+    private TextView num_f;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_your_gallery);
+        Intent intent = getIntent();
+        yourid = intent.getStringExtra("your_id");
+        mg_id = findViewById(R.id.your_id);
+        mg_id.setText(yourid);
+        num_f = findViewById(R.id.num_follower);
 
-        final View view = inflater.inflate(R.layout.fragment_my_gallery, container, false);
-
-        recyclerView = view.findViewById(R.id.mg_recyclerview);
+        recyclerView = findViewById(R.id.your_recyclerview);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(view.getContext(),3,RecyclerView.VERTICAL,false);
+        layoutManager = new GridLayoutManager(this,3,RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
         arrayList = new ArrayList<>();
-
-        userid = mAuth.getUid();
-        mg_id = view.findViewById(R.id.mg_id);
-
 
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("Post");
@@ -62,33 +58,24 @@ public class MyGalleryFragment extends Fragment {
                 arrayList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     PostItem postItem = snapshot.getValue(PostItem.class);
-                    if(postItem.getUserid().equals(userid)){
+                    if(postItem.getPostid().equals(yourid)){
                         for(int i=0;i<postItem.getImageurilist().size();i++){
                             arrayList.add(postItem.getImageurilist().get(i));
                         }
                         mg_id.setText(postItem.getNickname());
+                        num_f.setText(postItem.getJjimcnt());
+                        break;
                     }
                 }
 
-                adapter = new GalleryAdapter(arrayList, view.getContext());
+                adapter = new GalleryAdapter(arrayList, getApplicationContext());
 
                 recyclerView.setAdapter(adapter);
 
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
-
-        return view;
     }
-
-    /*public void store(View view) {
-    }
-
-    public void follwer(View view) {
-    }*/
-
 }
