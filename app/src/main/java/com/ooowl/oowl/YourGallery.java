@@ -63,7 +63,6 @@ public class YourGallery extends AppCompatActivity {
                             arrayList.add(postItem.getImageurilist().get(i));
                         }
                         mg_id.setText(postItem.getNickname());
-                        num_f.setText(postItem.getJjimcnt());
                         break;
                     }
                 }

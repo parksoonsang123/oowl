@@ -33,6 +33,8 @@ public class MyGalleryFragment extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private TextView mg_id;
+    private TextView jjimcnt;
+
     String userid;
 
 
@@ -52,6 +54,7 @@ public class MyGalleryFragment extends Fragment {
 
         userid = mAuth.getUid();
         mg_id = view.findViewById(R.id.mg_id);
+        jjimcnt = view.findViewById(R.id.num_jjim);
 
 
         database = FirebaseDatabase.getInstance();
@@ -67,6 +70,7 @@ public class MyGalleryFragment extends Fragment {
                             arrayList.add(postItem.getImageurilist().get(i));
                         }
                         mg_id.setText(postItem.getNickname());
+                        jjimcnt.setText(postItem.getJjimcnt());
                     }
                 }
 
