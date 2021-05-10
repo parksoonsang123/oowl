@@ -63,6 +63,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                     reference1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            list.clear();
                             for(DataSnapshot snapshot1 : snapshot.getChildren()){
                                 ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
                                 list.add(item2);
@@ -96,6 +97,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     UsersItem item = snapshot.getValue(UsersItem.class);
                     holder.nickname.setText(item.getNickname());
+
+                    DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
+                    reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            list.clear();
+                            for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                                ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
+                                list.add(item2);
+                            }
+
+                            Collections.sort(list, new Ascending());
+
+                            holder.contents.setText(list.get(0).getContents());
+
+                            Long t = Long.parseLong(list.get(0).getTime());
+                            holder.time.setText(formatTimeString(t));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
