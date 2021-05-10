@@ -47,6 +47,9 @@ public class ChattingActivity extends AppCompatActivity {
 
     private ArrayList<ChattingItem> list = new ArrayList<>();
 
+    ValueEventListener seenListener;
+    DatabaseReference ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,19 +89,6 @@ public class ChattingActivity extends AppCompatActivity {
                             Toast.makeText(ChattingActivity.this, "메세지를 입력해주세요.", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
-
-                            HashMap result = new HashMap<>();
-
-                            result.put("chatid", chatid);
-                            result.put("id", userid);
-                            result.put("time", System.currentTimeMillis()+"");
-                            result.put("contents", ct);
-
-                            reference1.setValue(result);
-
-                            input.setText("");
-
                             DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
                             reference2.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -148,6 +138,21 @@ public class ChattingActivity extends AppCompatActivity {
 
                                             }
                                         });
+
+                                        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
+
+                                        HashMap result = new HashMap<>();
+
+                                        result.put("chatid", chatid);
+                                        result.put("senderid", userid);
+                                        result.put("receiverid", s2);
+                                        result.put("time", System.currentTimeMillis()+"");
+                                        result.put("contents", ct);
+                                        result.put("isseen", false);
+
+                                        reference1.setValue(result);
+
+                                        input.setText("");
                                     }
                                     else if(s2.equals(userid)){
                                         DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s1);
@@ -190,6 +195,21 @@ public class ChattingActivity extends AppCompatActivity {
 
                                             }
                                         });
+
+                                        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid).push();
+
+                                        HashMap result = new HashMap<>();
+
+                                        result.put("chatid", chatid);
+                                        result.put("senderid", userid);
+                                        result.put("receiverid", s1);
+                                        result.put("time", System.currentTimeMillis()+"");
+                                        result.put("contents", ct);
+                                        result.put("isseen", false);
+
+                                        reference1.setValue(result);
+
+                                        input.setText("");
                                     }
                                 }
 
@@ -226,11 +246,11 @@ public class ChattingActivity extends AppCompatActivity {
                             list.clear();
                             for(DataSnapshot snapshot1 : snapshot.getChildren()){
                                 ChattingItem item1 = snapshot1.getValue(ChattingItem.class);
-                                if(item1.getId().equals(userid)){
-                                    list.add(new ChattingItem(item1.getContents(), item1.getId(), item1.getTime(), item1.getChatid(), Code.ViewType.SECOND));
+                                if(item1.getSenderid().equals(userid)){
+                                    list.add(new ChattingItem(item1.getContents(), item1.getSenderid(), item1.getReceiverid(), item1.getTime(), item1.getChatid(), item1.isIsseen(), Code.ViewType.SECOND));
                                 }
                                 else{
-                                    list.add(new ChattingItem(item1.getContents(), item1.getId(), item1.getTime(), item1.getChatid(), Code.ViewType.FIRST));
+                                    list.add(new ChattingItem(item1.getContents(), item1.getSenderid(), item1.getReceiverid(), item1.getTime(), item1.getChatid(), item1.isIsseen(), Code.ViewType.FIRST));
                                 }
 
                             }
@@ -264,11 +284,11 @@ public class ChattingActivity extends AppCompatActivity {
                     list.clear();
                     for(DataSnapshot snapshot1 : snapshot.getChildren()){
                         ChattingItem item1 = snapshot1.getValue(ChattingItem.class);
-                        if(item1.getId().equals(userid)){
-                            list.add(new ChattingItem(item1.getContents(), item1.getId(), item1.getTime(), item1.getChatid(), Code.ViewType.SECOND));
+                        if(item1.getSenderid().equals(userid)){
+                            list.add(new ChattingItem(item1.getContents(), item1.getSenderid(), item1.getReceiverid(), item1.getTime(), item1.getChatid(), item1.isIsseen(), Code.ViewType.SECOND));
                         }
                         else{
-                            list.add(new ChattingItem(item1.getContents(), item1.getId(), item1.getTime(), item1.getChatid(), Code.ViewType.FIRST));
+                            list.add(new ChattingItem(item1.getContents(), item1.getSenderid(), item1.getReceiverid(), item1.getTime(), item1.getChatid(), item1.isIsseen(), Code.ViewType.FIRST));
                         }
 
                     }
@@ -286,12 +306,40 @@ public class ChattingActivity extends AppCompatActivity {
 
         }
 
+
+
+        seenMessage(userid, postid, chatid);
+
+
+
     }
 
     /*private String makeTimeStamp(long in){
         SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm:ss");
         return format.format(in);
     }*/
+
+    private void seenMessage(final String userid, String postid, String chatid){
+        ref = FirebaseDatabase.getInstance().getReference("Chat").child(postid).child(chatid);
+        seenListener = ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
+                    if(item2.getReceiverid().equals(auth.getCurrentUser().getUid())){
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen", true);
+                        snapshot1.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     private void currentUser(String userid){
         SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
@@ -302,18 +350,14 @@ public class ChattingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         currentUser(userid);
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-
+        ref.removeEventListener(seenListener);
         currentUser("none");
-
     }
 }
 

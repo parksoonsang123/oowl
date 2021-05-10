@@ -51,7 +51,22 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else{
             ((SecondViewHolder) holder).contents.setText(mDataList.get(position).getContents());
+
+            if(position == mDataList.size()-1){
+                if(mDataList.get(position).isIsseen()){
+                    ((SecondViewHolder) holder).txt_seen.setText("Seen");
+                }
+                else{
+                    ((SecondViewHolder) holder).txt_seen.setText("Delivered");
+                }
+            }
+            else{
+                ((SecondViewHolder) holder).txt_seen.setVisibility(View.GONE);
+            }
+
         }
+
+
 
 
     }
@@ -83,10 +98,12 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class SecondViewHolder extends RecyclerView.ViewHolder{
 
         TextView contents;
+        TextView txt_seen;
+
         public SecondViewHolder(@NonNull View itemView) {
             super(itemView);
             contents = itemView.findViewById(R.id.chatting_content2);
-
+            txt_seen = itemView.findViewById(R.id.tv_seen);
         }
 
 

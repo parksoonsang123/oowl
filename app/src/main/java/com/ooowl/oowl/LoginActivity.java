@@ -106,9 +106,31 @@ public class LoginActivity extends AppCompatActivity {
                         if(chk_auto.isChecked()){
                             MySharedPreferences.setPref(context_login, strEmail, strPwd,true);
                         }
-                        Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
-                        startActivity(intent);
-                        finish(); //현재 액티비티 파괴
+
+                        FirebaseMessaging.getInstance().getToken()
+                                .addOnCompleteListener(new OnCompleteListener<String>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<String> task) {
+                                        if(!task.isSuccessful()){
+                                            Toast.makeText(LoginActivity.this, "토큰 생성 실패", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+
+                                        String token = task.getResult();
+                                        String uid = mFirebaseAuth.getCurrentUser().getUid();
+                                        HashMap result = new HashMap<>();
+                                        result.put("UID", uid);
+                                        result.put("Token", token);
+
+                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("UserTokenList").child(uid);
+                                        reference.setValue(result);
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+
                     }else{
                         Toast.makeText(LoginActivity.this, "인증 메일을 확인해주세요!", Toast.LENGTH_LONG).show();
                     }

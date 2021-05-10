@@ -3,20 +3,32 @@ package com.ooowl.oowl;
 public class ChattingItem2 {
 
     private String contents;
-    private String id;
+    private String senderid;
+    private String receiverid;
     private String time;
     private String chatid;
+    private boolean isseen;
 
-    public ChattingItem2(String contents, String id, String time, String chatid) {
+    public ChattingItem2(String contents, String senderid, String receiverid, String time, String chatid, boolean isseen) {
         this.contents = contents;
-        this.id = id;
+        this.senderid = senderid;
+        this.receiverid = receiverid;
         this.time = time;
         this.chatid = chatid;
+        this.isseen = isseen;
     }
 
     public ChattingItem2() {
     }
 
+
+    public boolean isIsseen() {
+        return isseen;
+    }
+
+    public void setIsseen(boolean isseen) {
+        this.isseen = isseen;
+    }
 
     public String getChatid() {
         return chatid;
@@ -34,19 +46,27 @@ public class ChattingItem2 {
         this.contents = contents;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTime() {
         return time;
     }
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getSenderid() {
+        return senderid;
+    }
+
+    public void setSenderid(String senderid) {
+        this.senderid = senderid;
+    }
+
+    public String getReceiverid() {
+        return receiverid;
+    }
+
+    public void setReceiverid(String receiverid) {
+        this.receiverid = receiverid;
     }
 }
