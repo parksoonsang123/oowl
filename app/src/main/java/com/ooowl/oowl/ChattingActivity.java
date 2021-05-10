@@ -1,20 +1,28 @@
 package com.ooowl.oowl;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +58,13 @@ public class ChattingActivity extends AppCompatActivity {
     ValueEventListener seenListener;
     DatabaseReference ref;
 
+    ImageView back;
+    ImageView image;
+    TextView nick;
+    TextView title;
+    TextView price;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +84,74 @@ public class ChattingActivity extends AppCompatActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
+        back = findViewById(R.id.chatting_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+        image = findViewById(R.id.chatting_img);
+        nick = findViewById(R.id.chatting_nickname);
+        title = findViewById(R.id.chatting_title);
+        price = findViewById(R.id.chatting_price);
 
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
+        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                PostItem item = snapshot.getValue(PostItem.class);
+                title.setText(item.getTitle());
+
+                String p = item.getPrice();
+                String pp = p.replace("₩","");
+                price.setText(pp+"원");
+
+                GradientDrawable drawable = (GradientDrawable)getDrawable(R.drawable.background_rounding);
+                image.setBackground(drawable);
+                image.setClipToOutline(true);
+                Glide.with(getApplicationContext()).load(item.getImageurilist().get(0)).into(image);
+
+                if(userid.equals(myid)){
+                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
+                    reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            UsersItem item1 = snapshot.getValue(UsersItem.class);
+                            nick.setText(item1.getNickname());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                else{
+                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(myid);
+                    reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            UsersItem item1 = snapshot.getValue(UsersItem.class);
+                            nick.setText(item1.getNickname());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         input = findViewById(R.id.et_chat);
         send = findViewById(R.id.bt_send);

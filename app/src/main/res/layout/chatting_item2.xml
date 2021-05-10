@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/chatting_content2"
-        android:background="@drawable/background_rounding2"
+        android:background="@drawable/chat_background2"
         android:padding="6dp"
         android:layout_gravity="right"
         android:layout_marginLeft="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:textSize="12dp"
+        android:textSize="15dp"
         android:text="채팅 내용"/>
 
     <TextView
