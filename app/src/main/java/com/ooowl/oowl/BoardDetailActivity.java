@@ -33,6 +33,7 @@ public class BoardDetailActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     String userid;
+    String yourid;
 
     DatabaseReference reference;
     DatabaseReference reference2;
@@ -88,6 +89,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String postid = intent.getStringExtra("pid");
         final String postuserid = intent.getStringExtra("uid");
+        yourid = postid;
 
 
 
@@ -608,6 +610,20 @@ public class BoardDetailActivity extends AppCompatActivity {
         return msg;
     }
 
+    public void togallery(View view) {
+
+        Intent intent1;
+
+        if(yourid == userid)
+        {
+            intent1 = new Intent(BoardDetailActivity.this, MyGalleryFragment.class);
+        }
+        else {
+            intent1 = new Intent(BoardDetailActivity.this, YourGallery.class);
+            intent1.putExtra("your_id", yourid);
+        }
+        startActivity(intent1);
+    }
 }
 
 
