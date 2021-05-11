@@ -75,9 +75,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             list.clear();
+                            int cnt = 0;
                             for(DataSnapshot snapshot1 : snapshot.getChildren()){
                                 ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
                                 list.add(item2);
+                                if(item2.getReceiverid().equals(my) && !item2.isIsseen()){
+                                    cnt++;
+                                }
                             }
 
                             if(list.size()>0){
@@ -87,6 +91,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
                                 Long t = Long.parseLong(list.get(0).getTime());
                                 holder.time.setText(formatTimeString(t));
+                            }
+
+                            if(cnt == 0){
+                                holder.chat_new.setVisibility(View.GONE);
+                            }
+                            else if(cnt <= 99){
+                                holder.chat_new.setVisibility(View.VISIBLE);
+                                holder.chat_new.setText(cnt+"");
+                            }
+                            else{
+                                holder.chat_new.setVisibility(View.VISIBLE);
+                                holder.chat_new.setText("99+");
                             }
 
                         }
@@ -125,9 +141,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             list.clear();
+                            int cnt = 0;
                             for(DataSnapshot snapshot1 : snapshot.getChildren()){
                                 ChattingItem2 item2 = snapshot1.getValue(ChattingItem2.class);
                                 list.add(item2);
+                                if(item2.getReceiverid().equals(my) && !item2.isIsseen()){
+                                    cnt++;
+                                }
                             }
                             if(list.size()>0){
                                 Collections.sort(list, new Ascending());
@@ -136,6 +156,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
                                 Long t = Long.parseLong(list.get(0).getTime());
                                 holder.time.setText(formatTimeString(t));
+                            }
+
+                            if(cnt == 0){
+                                holder.chat_new.setVisibility(View.GONE);
+                            }
+                            else if(cnt <= 99){
+                                holder.chat_new.setVisibility(View.VISIBLE);
+                                holder.chat_new.setText(cnt+"");
+                            }
+                            else{
+                                holder.chat_new.setVisibility(View.VISIBLE);
+                                holder.chat_new.setText("99+");
                             }
 
                         }
@@ -166,12 +198,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     TextView nickname;
     TextView time;
     TextView contents;
+    TextView chat_new;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.profile);
             nickname = itemView.findViewById(R.id.sell_nick);
             time = itemView.findViewById(R.id.chattime);
             contents = itemView.findViewById(R.id.contents);
+            chat_new = itemView.findViewById(R.id.chat_new);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
