@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
@@ -57,6 +60,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     UsersItem item = snapshot.getValue(UsersItem.class);
+
+                    if(item.getProfileuri() != null){
+                        Glide.with(context).load(item.getProfileuri()).into(holder.image);
+                    }
+                    else{
+                        holder.image.setImageResource(R.drawable.mypageimage);
+                    }
+
                     holder.nickname.setText(item.getNickname());
 
                     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
@@ -99,6 +110,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     UsersItem item = snapshot.getValue(UsersItem.class);
+
+                    if(item.getProfileuri() != null){
+                        Glide.with(context).load(item.getProfileuri()).into(holder.image);
+                    }
+                    else{
+                        holder.image.setImageResource(R.drawable.mypageimage);
+                    }
+
                     holder.nickname.setText(item.getNickname());
 
                     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chat").child(mDataList.get(position).getPostid()).child(mDataList.get(position).getChatid());
@@ -143,7 +162,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-    ImageView image;
+    CircleImageView image;
     TextView nickname;
     TextView time;
     TextView contents;

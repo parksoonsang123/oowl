@@ -12,6 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -44,10 +51,30 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
 
         if(holder instanceof FirstViewHolder){
             ((FirstViewHolder) holder).contents.setText(mDataList.get(position).getContents());
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(mDataList.get(position).getSenderid());
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UsersItem item = snapshot.getValue(UsersItem.class);
+                    if(item.getProfileuri() == null){
+                        ((FirstViewHolder) holder).image.setImageResource(R.drawable.mypageimage);
+                    }
+                    else{
+                        Glide.with(context).load(item.getProfileuri()).into(((FirstViewHolder) holder).image);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
         else{
             ((SecondViewHolder) holder).contents.setText(mDataList.get(position).getContents());

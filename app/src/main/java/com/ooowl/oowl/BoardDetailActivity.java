@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,8 +92,6 @@ public class BoardDetailActivity extends AppCompatActivity {
         final String postid = intent.getStringExtra("pid");
         final String postuserid = intent.getStringExtra("uid");
 
-
-
         nick = findViewById(R.id.detail_nick);
         time = findViewById(R.id.detail_time);
         jjimcnt = findViewById(R.id.detail_jjimcnt);
@@ -139,9 +138,32 @@ public class BoardDetailActivity extends AppCompatActivity {
                 }
                 else{   //마이 갤러리 프래그먼트로 이동
 
+
+
+
                 }
             }
         });
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(postuserid);
+        reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                if(item.getProfileuri() != null){
+                    Glide.with(BoardDetailActivity.this).load(item.getProfileuri()).into(profile);
+                }
+                else{
+                    profile.setImageResource(R.drawable.mypageimage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override

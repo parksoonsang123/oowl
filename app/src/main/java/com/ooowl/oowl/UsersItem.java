@@ -8,17 +8,37 @@ public class UsersItem {
     private String passward;
     private String following;
     private String follower;
+    private String profileuri;
+    private String profileimagename;
 
     public UsersItem() {
     }
 
-    public UsersItem(String email, String idToken, String nickname, String passward, String following, String follower) {
+    public UsersItem(String email, String idToken, String nickname, String passward, String following, String follower, String profileuri, String profileimagename) {
         this.email = email;
         this.idToken = idToken;
         this.nickname = nickname;
         this.passward = passward;
         this.following = following;
         this.follower = follower;
+        this.profileuri = profileuri;
+        this.profileimagename = profileimagename;
+    }
+
+    public String getProfileimagename() {
+        return profileimagename;
+    }
+
+    public void setProfileimagename(String profileimagename) {
+        this.profileimagename = profileimagename;
+    }
+
+    public String getProfileuri() {
+        return profileuri;
+    }
+
+    public void setProfileuri(String profileuri) {
+        this.profileuri = profileuri;
     }
 
     public String getFollowing() {
