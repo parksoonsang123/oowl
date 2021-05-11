@@ -11,6 +11,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="4dp"
             android:orientation="horizontal">
 
 
@@ -18,11 +20,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@android:mipmap/sym_def_app_icon"/>
+                    android:src="@drawable/mypageimage"/>
             </LinearLayout>
 
             <LinearLayout

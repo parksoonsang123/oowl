@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +25,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class YourGallery extends AppCompatActivity {
 
@@ -44,6 +47,8 @@ public class YourGallery extends AppCompatActivity {
     Button follow_btn;
     String userid;
 
+    CircleImageView profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,14 +63,22 @@ public class YourGallery extends AppCompatActivity {
         mg_id = findViewById(R.id.your_id);
         num_follower = findViewById(R.id.num_follower);
         num_following = findViewById(R.id.num_following);
+        profile = findViewById(R.id.profile);
 
-        //내가 팔로잉
+        //내가 팔로잉 && 프로필
         DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(yourid);
         reference3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UsersItem item = snapshot.getValue(UsersItem.class);
                 num_following.setText(item.getFollowing());
+
+                if(item.getProfileuri() == null){
+                    profile.setImageResource(R.drawable.mypageimage);
+                }
+                else{
+                    Glide.with(YourGallery.this).load(item.getProfileuri()).into(profile);
+                }
             }
 
             @Override
