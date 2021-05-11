@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="#000000"
-                        android:text="0" />
+                        android:text="" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="#000000"
-                        android:text="0" />
+                        android:text="" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -91,6 +91,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btn_jjim"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -106,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="#000000"
-                        android:text="0" />
+                        android:text="" />
 
                     <TextView
                         android:layout_width="match_parent"

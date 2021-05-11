@@ -35,11 +35,13 @@ public class MyGalleryFragment extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private TextView mg_id;
-    private TextView jjimcnt;
+    private TextView num_jjim;
     private TextView num_follower;
     private TextView num_following;
     private LinearLayout btn_fer;
     private LinearLayout btn_fing;
+    private LinearLayout btn_jjim;
+
 
     String userid;
 
@@ -60,7 +62,7 @@ public class MyGalleryFragment extends Fragment {
 
         userid = mAuth.getUid();
         mg_id = view.findViewById(R.id.mg_id);
-        jjimcnt = view.findViewById(R.id.num_jjim);
+        num_jjim = view.findViewById(R.id.num_jjim);
 
         num_follower = view.findViewById(R.id.num_follower);
         num_following = view.findViewById(R.id.num_following);
@@ -79,7 +81,6 @@ public class MyGalleryFragment extends Fragment {
                             arrayList.add(postItem.getImageurilist().get(i));
                         }
                         mg_id.setText(postItem.getNickname());
-                        jjimcnt.setText(postItem.getJjimcnt());
                     }
                 }
 
@@ -94,19 +95,13 @@ public class MyGalleryFragment extends Fragment {
             }
         });
 
-
         //내가 팔로잉
-        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Follow").child(userid);
-        reference3.addValueEventListener(new ValueEventListener() {
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int cnt = 0;
-                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                    if(snapshot1 != null){
-                        cnt++;
-                    }
-                }
-                num_following.setText(cnt+"");
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                num_following.setText(item.getFollowing());
             }
 
             @Override
@@ -116,8 +111,22 @@ public class MyGalleryFragment extends Fragment {
         });
 
         //나를 팔로잉
-        DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("Follower").child(userid);
-        reference4.addValueEventListener(new ValueEventListener() {
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                num_follower.setText(item.getFollower());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("JJim").child(userid);
+        reference3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int cnt = 0;
@@ -126,7 +135,7 @@ public class MyGalleryFragment extends Fragment {
                         cnt++;
                     }
                 }
-                num_follower.setText(cnt+"");
+                num_jjim.setText(cnt+"");
             }
 
             @Override
@@ -134,6 +143,7 @@ public class MyGalleryFragment extends Fragment {
 
             }
         });
+
 
 
         btn_fer = view.findViewById(R.id.btn_fer);
@@ -154,6 +164,17 @@ public class MyGalleryFragment extends Fragment {
                 startActivity(intent1);
             }
         });
+
+        btn_jjim=view.findViewById(R.id.btn_jjim);
+        btn_jjim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getContext(),JjimMenu.class);
+                intent1.putExtra("userid",userid);
+                startActivity(intent1);
+            }
+        });
+
 
 
         return view;

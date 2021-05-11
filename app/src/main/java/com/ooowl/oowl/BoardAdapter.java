@@ -96,7 +96,6 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                     Intent intent = new Intent(v.getContext(), BoardDetailActivity.class);
                     intent.putExtra("pid", mDataList.get(pos).getPostid());
                     intent.putExtra("uid", mDataList.get(pos).getUserid());
-                    intent.putExtra("pos", pos);
                     v.getContext().startActivity(intent);
                 }
             });

@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FollowingMenu"></activity>
+        <activity android:name=".JjimMenu"></activity>
+        <activity android:name=".FollowingMenu" />
         <activity android:name=".FollowerMenu" />
         <activity android:name=".YourGallery" />
         <activity android:name=".ChattingActivity" />

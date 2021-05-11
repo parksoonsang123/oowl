@@ -47,6 +47,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UsersItem usersItem = snapshot.getValue(UsersItem.class);
                 holder.nickname.setText(usersItem.getNickname());
+                holder.follow_cnt.setText(usersItem.getFollower());
             }
 
             @Override
@@ -65,12 +66,12 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nickname;
-
+        TextView follow_cnt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.nickname = itemView.findViewById(R.id.f_nick);
-
+            this.follow_cnt = itemView.findViewById(R.id.num_yourfer);
         }
     }
 }
