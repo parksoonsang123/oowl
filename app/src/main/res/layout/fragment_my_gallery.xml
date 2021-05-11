@@ -38,14 +38,13 @@
                 android:layout_gravity="center">
 
                 <LinearLayout
+                    android:id="@+id/btn_fer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <!--                android:onClick="follwer"-->
-                    <!--                android:clickable="true"-->>
 
                     <TextView
                         android:id="@+id/num_follower"
@@ -71,8 +70,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <!--                android:onClick="follwer"-->
-                    <!--                android:clickable="true"-->>
+
 
                     <TextView
                         android:id="@+id/num_following"

@@ -57,17 +57,12 @@ public class YourGallery extends AppCompatActivity {
         num_following = findViewById(R.id.num_following);
 
         //내가 팔로잉
-        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Follow").child(yourid);
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(yourid);
         reference3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int cnt = 0;
-                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                    if(snapshot1 != null){
-                        cnt++;
-                    }
-                }
-                num_following.setText(cnt+"");
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                num_following.setText(item.getFollowing());
             }
 
             @Override
@@ -77,17 +72,12 @@ public class YourGallery extends AppCompatActivity {
         });
 
         //나를 팔로잉
-        DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("Follower").child(yourid);
+        DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("Users").child(yourid);
         reference4.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int cnt = 0;
-                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                    if(snapshot1 != null){
-                        cnt++;
-                    }
-                }
-                num_follower.setText(cnt+"");
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                num_follower.setText(item.getFollower());
             }
 
             @Override
@@ -131,6 +121,8 @@ public class YourGallery extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             FollowItem item = snapshot.getValue(FollowItem.class);
                             if(item == null){
+                                follower_plus(yourid);
+                                following_plus(userid);
                                 HashMap result = new HashMap<>();
                                 result.put("follow", "1");
                                 reference.setValue(result);
@@ -144,6 +136,8 @@ public class YourGallery extends AppCompatActivity {
 
                             }
                             else{
+                                follower_minus(yourid);
+                                following_minus(userid);
                                 reference.removeValue();
                                 follow_btn.setBackgroundResource(R.drawable.follow_btn1);
                                 follow_btn.setTextColor(Color.BLACK);
@@ -196,6 +190,95 @@ public class YourGallery extends AppCompatActivity {
 
 
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void follower_plus(String userid){
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+
+                String ff = item.getFollower();
+                int ff2 = Integer.parseInt(ff) + 1;
+                String ff3 = ff2+"";
+                item.setFollower(ff3);
+
+                reference.setValue(item);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void follower_minus(String userid){
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+
+                String ff = item.getFollower();
+                int ff2 = Integer.parseInt(ff) - 1;
+                String ff3 = ff2+"";
+                item.setFollower(ff3);
+
+                reference.setValue(item);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void following_plus(String userid){
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+
+                String ff = item.getFollowing();
+                int ff2 = Integer.parseInt(ff) + 1;
+                String ff3 = ff2+"";
+                item.setFollowing(ff3);
+
+                reference.setValue(item);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void following_minus(String userid){
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+
+                String ff = item.getFollowing();
+                int ff2 = Integer.parseInt(ff) - 1;
+                String ff3 = ff2+"";
+                item.setFollowing(ff3);
+
+                reference.setValue(item);
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

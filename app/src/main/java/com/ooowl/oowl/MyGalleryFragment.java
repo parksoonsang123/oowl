@@ -1,5 +1,6 @@
 package com.ooowl.oowl;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +38,7 @@ public class MyGalleryFragment extends Fragment {
     private TextView jjimcnt;
     private TextView num_follower;
     private TextView num_following;
+    private LinearLayout btn_fer;
 
     String userid;
 
@@ -128,6 +131,17 @@ public class MyGalleryFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+
+        btn_fer = view.findViewById(R.id.btn_fer);
+        btn_fer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getContext(), FollowerMenu.class);
+                intent1.putExtra("userid",userid);
+                startActivity(intent1);
             }
         });
 

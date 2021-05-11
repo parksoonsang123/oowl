@@ -6,15 +6,35 @@ public class UsersItem {
     private String idToken;
     private String nickname;
     private String passward;
+    private String following;
+    private String follower;
 
     public UsersItem() {
     }
 
-    public UsersItem(String email, String idToken, String nickname, String passward) {
+    public UsersItem(String email, String idToken, String nickname, String passward, String following, String follower) {
         this.email = email;
         this.idToken = idToken;
         this.nickname = nickname;
         this.passward = passward;
+        this.following = following;
+        this.follower = follower;
+    }
+
+    public String getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(String following) {
+        this.following = following;
+    }
+
+    public String getFollower() {
+        return follower;
+    }
+
+    public void setFollower(String follower) {
+        this.follower = follower;
     }
 
     public String getEmail() {
