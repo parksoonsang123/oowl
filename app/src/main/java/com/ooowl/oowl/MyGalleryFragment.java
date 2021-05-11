@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,6 +73,7 @@ public class MyGalleryFragment extends Fragment {
     private Uri imageuri;
     private StorageTask uploadTask;
 
+    int flag = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -232,14 +235,67 @@ public class MyGalleryFragment extends Fragment {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImage();
+                setBottomSheetDialog(v);
             }
         });
 
-
-
-
         return view;
+    }
+
+    private void setBottomSheetDialog(View view){
+
+        View v;
+        BottomSheetBehavior mBehavior;
+
+        final BottomSheetDialog normal_dialog = new BottomSheetDialog(view.getContext(),R.style.BottomSheetDialogTheme);
+        v  = LayoutInflater.from(getContext()).inflate(R.layout.layout_bottom_sheet_profile,
+                (LinearLayout)view.findViewById(R.id.bottomSheetContainer));
+
+        LinearLayout layout1 = v.findViewById(R.id.bs1);
+        LinearLayout layout2 = v.findViewById(R.id.bs2);
+
+        layout1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImage();
+                normal_dialog.dismiss();
+            }
+        });
+
+        layout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {   //프로필 사진 삭제
+                final DatabaseReference reference6 = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+                reference6.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        UsersItem item = snapshot.getValue(UsersItem.class);
+                        if(item.getProfileuri() != null){
+                            String tmp = item.getProfileimagename();
+                            StorageReference reference5 = FirebaseStorage.getInstance().getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("profile").child(tmp);
+                            reference5.delete();
+
+                            item.setProfileuri(null);
+                            item.setProfileimagename(null);
+                            reference6.setValue(item);
+                            normal_dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
+        normal_dialog.setContentView(v);
+
+        mBehavior = BottomSheetBehavior.from((View)v.getParent());
+        mBehavior.setPeekHeight(4000);
+        normal_dialog.show();
+
     }
 
     private void openImage() {
@@ -254,6 +310,7 @@ public class MyGalleryFragment extends Fragment {
         progressDialog.setTitle("이미지 업로드");
         progressDialog.show();
 
+        flag = -1;
         if(imageuri != null){
             storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com");
@@ -266,7 +323,7 @@ public class MyGalleryFragment extends Fragment {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                    flag = 1;
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -292,7 +349,7 @@ public class MyGalleryFragment extends Fragment {
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
+                    if(task.isSuccessful() && flag == 1){
                         Uri downloadUri = task.getResult();
                         profileupdate(downloadUri.toString(), profileimagename);
                         progressDialog.dismiss();

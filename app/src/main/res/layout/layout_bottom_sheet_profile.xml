@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:paddingVertical="8dp"
+        android:id="@+id/bottomSheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+       <LinearLayout
+           android:id="@+id/bs1"
+           android:clickable="true"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="15dp"
+           android:orientation="horizontal">
+
+           <ImageView
+               android:src="@drawable/photoalbum"
+               android:layout_width="25dp"
+               android:layout_height="25dp"/>
+
+           <TextView
+               android:layout_marginLeft="15dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="앨범에서 선택"
+               android:textSize="16dp"
+               android:textColor="#000000"/>
+
+       </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bs2"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:src="@drawable/trash"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="프로필 사진 삭제"
+                android:textSize="16dp"
+                android:textColor="#000000"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

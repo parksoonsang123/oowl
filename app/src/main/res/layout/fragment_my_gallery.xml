@@ -126,7 +126,6 @@
 
         <TextView
             android:id="@+id/mg_id"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
