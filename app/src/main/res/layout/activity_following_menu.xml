@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FollowerMenu">
+    tools:context=".FollowingMenu">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fer_recyclerview"
+        android:id="@+id/fing_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

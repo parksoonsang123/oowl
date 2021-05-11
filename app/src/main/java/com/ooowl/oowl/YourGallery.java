@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,8 @@ public class YourGallery extends AppCompatActivity {
     private String yourid;
     private TextView num_follower;
     private TextView num_following;
+    private LinearLayout btn_fer;
+    private LinearLayout btn_fing;
 
     Button follow_btn;
     String userid;
@@ -195,6 +198,24 @@ public class YourGallery extends AppCompatActivity {
 
             }
         });
+        btn_fer = findViewById(R.id.btn_fer);
+        btn_fer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(YourGallery.this, FollowerMenu.class);
+                intent1.putExtra("userid",yourid);
+                startActivity(intent1);
+            }
+        });
+        btn_fing = findViewById(R.id.btn_fing);
+        btn_fing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(YourGallery.this, FollowingMenu.class);
+                intent1.putExtra("userid",yourid);
+                startActivity(intent1);
+            }
+        });
     }
 
 
@@ -284,5 +305,6 @@ public class YourGallery extends AppCompatActivity {
 
             }
         });
+
     }
 }

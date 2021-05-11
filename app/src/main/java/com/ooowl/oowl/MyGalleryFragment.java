@@ -39,6 +39,7 @@ public class MyGalleryFragment extends Fragment {
     private TextView num_follower;
     private TextView num_following;
     private LinearLayout btn_fer;
+    private LinearLayout btn_fing;
 
     String userid;
 
@@ -140,6 +141,15 @@ public class MyGalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(getContext(), FollowerMenu.class);
+                intent1.putExtra("userid",userid);
+                startActivity(intent1);
+            }
+        });
+        btn_fing = view.findViewById(R.id.btn_fing);
+        btn_fing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getContext(), FollowingMenu.class);
                 intent1.putExtra("userid",userid);
                 startActivity(intent1);
             }
