@@ -432,7 +432,7 @@ public class WriteBoardActivity extends AppCompatActivity {
                     }
 
                     String pg = item.getPrice();
-                    String pg2 = pg.substring(1, pg.length()-3);
+                    String pg2 = pg.substring(0, pg.length()-3);
                     int pg3 = Integer.parseInt(pg2);
                     sb.setProgress(pg3);
                     price.setText(pg);
