@@ -10,8 +10,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile"
         android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:background="@drawable/mypageimage"/>
+        android:layout_height="65dp"/>
 
 
     <LinearLayout

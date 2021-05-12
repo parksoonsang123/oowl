@@ -15,7 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JjimMenu"></activity>
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".JjimMenu" />
         <activity android:name=".FollowingMenu" />
         <activity android:name=".FollowerMenu" />
         <activity android:name=".YourGallery" />
@@ -26,11 +37,7 @@
         <activity android:name=".WriteBoardActivity" />
         <activity android:name=".MainActivity2" />
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name=".Notification.FirebaseNotificationService">
