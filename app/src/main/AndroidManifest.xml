@@ -26,17 +26,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JjimMenu" />
-        <activity android:name=".FollowingMenu" />
-        <activity android:name=".FollowerMenu" />
-        <activity android:name=".YourGallery" />
-        <activity android:name=".ChattingActivity" />
-        <activity android:name=".FindActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".BoardDetailActivity" />
-        <activity android:name=".WriteBoardActivity" />
-        <activity android:name=".MainActivity2" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".JjimMenu"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FollowingMenu"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FollowerMenu"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".YourGallery"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChattingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FindActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BoardDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WriteBoardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service android:name=".Notification.FirebaseNotificationService">
             <intent-filter>

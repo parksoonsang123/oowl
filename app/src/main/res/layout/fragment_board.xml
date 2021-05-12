@@ -6,12 +6,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BoardFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/board_recyclerview1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/board_item1" />
+        android:background="#ffffff"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/seq_new"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:elevation="0dp"
+                android:background="@drawable/info_btn2"
+                android:text="최신 작품 순"/>
+
+            <Button
+                android:id="@+id/seq_price"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/info_btn1"
+                android:textColor="#000000"
+                android:elevation="0dp"
+                android:text="가격 낮은 순"/>
+
+            <Button
+                android:id="@+id/seq_price2"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/info_btn1"
+                android:textColor="#000000"
+                android:elevation="0dp"
+                android:text="가격 높은 순"/>
+
+            <Button
+                android:id="@+id/seq_jjim"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="#000000"
+                android:elevation="0dp"
+                android:background="@drawable/info_btn1"
+                android:text="찜 많은 순"/>
+
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/board_recyclerview1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/board_item1" />
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/board_floatingactionbutton"
