@@ -79,6 +79,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_detail);
 
+
         btn[0] = findViewById(R.id.btn1);
         btn[1] = findViewById(R.id.btn2);
         btn[2] = findViewById(R.id.btn3);
