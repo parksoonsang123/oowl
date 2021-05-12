@@ -581,7 +581,8 @@ public class WriteBoardActivity extends AppCompatActivity {
                 result.put("tradeyesno", rb2.getText().toString());
                 result.put("suggest", rb3.getText().toString());
                 result.put("address", address.getText().toString());
-                result.put("price", price.getText().toString());
+                String p2 = price.getText().toString().replace("₩","");
+                result.put("price", p2);
 
 
                 databaseReference.setValue(result);
@@ -639,7 +640,8 @@ public class WriteBoardActivity extends AppCompatActivity {
                     result.put("tradeyesno", rb2.getText().toString());
                     result.put("suggest", rb3.getText().toString());
                     result.put("address", address.getText().toString());
-                    result.put("price", price.getText().toString());
+                    String p2 = price.getText().toString().replace("₩","");
+                    result.put("price", p2);
 
 
                     databaseReference.setValue(result);
@@ -672,7 +674,8 @@ public class WriteBoardActivity extends AppCompatActivity {
             result.put("tradeyesno", rb2.getText().toString());
             result.put("suggest", rb3.getText().toString());
             result.put("address", address.getText().toString());
-            result.put("price", price.getText().toString());
+            String p2 = price.getText().toString().replace("₩","");
+            result.put("price", p2);
 
 
             databaseReference.setValue(result);

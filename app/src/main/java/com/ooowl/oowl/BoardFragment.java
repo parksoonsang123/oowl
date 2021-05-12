@@ -240,19 +240,91 @@ public class BoardFragment extends Fragment {
     }
 
     class Ascending2 implements Comparator<PostItem> {
-
         @Override
         public int compare(PostItem o1, PostItem o2) {
-            return o1.getPrice().compareTo(o2.getPrice());
+            String s1 = o1.getPrice();
+            String s11 = "";
+            if(s1.length() == 1){
+                s11 = "0000"+s1;
+            }
+            else if(s1.length() == 2){
+                s11 = "000"+s1;
+            }
+            else if(s1.length() == 3){
+                s11 = "00"+s1;
+            }
+            else if(s1.length() == 4){
+                s11 = "0"+s1;
+            }
+            else if(s1.length() == 5){
+                s11 = s1;
+            }
+
+
+            String s2 = o2.getPrice();
+            String s22 = "";
+            if(s2.length() == 1){
+                s22 = "0000"+s2;
+            }
+            else if(s2.length() == 2){
+                s22 = "000"+s2;
+            }
+            else if(s2.length() == 3){
+                s22 = "00"+s2;
+            }
+            else if(s2.length() == 4){
+                s22 = "0"+s2;
+            }
+            else if(s2.length() == 5){
+                s22 = s2;
+            }
+
+            return s11.compareTo(s22);
         }
 
     }
 
     class Ascending22 implements Comparator<PostItem> {
-
         @Override
         public int compare(PostItem o1, PostItem o2) {
-            return o2.getPrice().compareTo(o1.getPrice());
+            String s1 = o1.getPrice();
+            String s11 = "";
+            if(s1.length() == 1){
+                s11 = "0000"+s1;
+            }
+            else if(s1.length() == 2){
+                s11 = "000"+s1;
+            }
+            else if(s1.length() == 3){
+                s11 = "00"+s1;
+            }
+            else if(s1.length() == 4){
+                s11 = "0"+s1;
+            }
+            else if(s1.length() == 5){
+                s11 = s1;
+            }
+
+
+            String s2 = o2.getPrice();
+            String s22 = "";
+            if(s2.length() == 1){
+                s22 = "0000"+s2;
+            }
+            else if(s2.length() == 2){
+                s22 = "000"+s2;
+            }
+            else if(s2.length() == 3){
+                s22 = "00"+s2;
+            }
+            else if(s2.length() == 4){
+                s22 = "0"+s2;
+            }
+            else if(s2.length() == 5){
+                s22 = s2;
+            }
+
+            return s22.compareTo(s11);
         }
 
     }
