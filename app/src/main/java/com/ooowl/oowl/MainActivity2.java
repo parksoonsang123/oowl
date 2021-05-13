@@ -53,7 +53,10 @@ public class MainActivity2 extends AppCompatActivity {
         menu1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //알림설정
+                //알림설정 기능
+
+
+
 
 
 
@@ -66,7 +69,10 @@ public class MainActivity2 extends AppCompatActivity {
         menu2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //로그아웃
+                //로그아웃 기능
+
+
+
 
 
                 //drawerLayout 집어넣기
@@ -78,7 +84,10 @@ public class MainActivity2 extends AppCompatActivity {
         menu3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //회원탈퇴
+                //회원탈퇴 기능
+
+
+
 
 
                 //drawerLayout 집어넣기
