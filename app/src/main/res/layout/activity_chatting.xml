@@ -69,6 +69,7 @@
 
         <ImageView
             android:id="@+id/chatting_img"
+            android:scaleType="centerInside"
             android:layout_width="60dp"
             android:layout_height="60dp"/>
 

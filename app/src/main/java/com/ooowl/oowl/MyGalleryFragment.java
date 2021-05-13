@@ -50,7 +50,8 @@ import static android.app.Activity.RESULT_OK;
 public class MyGalleryFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    //private RecyclerView.Adapter adapter;
+    private GalleryAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<String> arrayList;
     private FirebaseDatabase database;
@@ -79,12 +80,11 @@ public class MyGalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         final View view = inflater.inflate(R.layout.fragment_my_gallery, container, false);
 
         recyclerView = view.findViewById(R.id.mg_recyclerview);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(view.getContext(),3,RecyclerView.VERTICAL,false);
+        layoutManager = new GridLayoutManager(view.getContext(),3);
         recyclerView.setLayoutManager(layoutManager);
 
         arrayList = new ArrayList<>();
