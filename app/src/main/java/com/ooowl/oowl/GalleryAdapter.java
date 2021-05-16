@@ -76,8 +76,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for(DataSnapshot snapshot1 : snapshot.getChildren()) {
                                 PostItem postItem1 = snapshot1.getValue(PostItem.class);
-                                System.out.println("1 : " + postItem1.getImageurilist());
-                                System.out.println("2 : " + arrayList.get(pos));
                                 if(("["+arrayList.get(pos)+"]").equals(postItem1.getImageurilist().toString())) {
                                     Intent intent = new Intent(v.getContext(), BoardDetailActivity.class);
                                     intent.putExtra("pid", postItem1.getPostid());
