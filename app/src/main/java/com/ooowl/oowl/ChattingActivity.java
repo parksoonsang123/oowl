@@ -68,6 +68,10 @@ public class ChattingActivity extends AppCompatActivity {
 
     Button out;
 
+    String selllogin;
+    String sellalram;
+    String mylogin;
+    String myalram;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,39 @@ public class ChattingActivity extends AppCompatActivity {
         final String sellid = intent.getStringExtra("sellid");
         final String myid = intent.getStringExtra("myid");
         final String chatid = intent.getStringExtra("chatid");
+
+
+
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
+        reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item3 = snapshot.getValue(UsersItem.class);
+                selllogin = item3.getLogin();
+                sellalram = item3.getAlram();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
+        reference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item3 = snapshot.getValue(UsersItem.class);
+                mylogin = item3.getLogin();
+                myalram = item3.getAlram();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         recyclerView = findViewById(R.id.rv_content);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -135,8 +172,8 @@ public class ChattingActivity extends AppCompatActivity {
         title = findViewById(R.id.chatting_title);
         price = findViewById(R.id.chatting_price);
 
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
-        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference reference22 = FirebaseDatabase.getInstance().getReference("Post").child(postid);
+        reference22.addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -167,13 +204,57 @@ public class ChattingActivity extends AppCompatActivity {
                         }
                     });
                 }
-                else{
+                else if(userid.equals(sellid)){
                     DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(myid);
                     reference3.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             UsersItem item1 = snapshot.getValue(UsersItem.class);
                             nick.setText(item1.getNickname());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                else{
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            ChatListItem item1 = snapshot.getValue(ChatListItem.class);
+                            if(item1.getSellid().equals(userid)){
+                                DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users").child(item1.getMyid());
+                                reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        UsersItem item2 = snapshot.getValue(UsersItem.class);
+                                        nick.setText(item2.getNickname());
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+                            else{
+                                DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users").child(item1.getSellid());
+                                reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        UsersItem item2 = snapshot.getValue(UsersItem.class);
+                                        nick.setText(item2.getNickname());
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
                         }
 
                         @Override
@@ -197,8 +278,6 @@ public class ChattingActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Post").child(postid);
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -216,8 +295,8 @@ public class ChattingActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 ChatListItem item1 = snapshot.getValue(ChatListItem.class);
 
-                                String s1 = item1.getMyid();
-                                String s2 = item1.getSellid();
+                                final String s1 = item1.getMyid();
+                                final String s2 = item1.getSellid();
 
                                 if(s1.equals(userid)){
                                     DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s2);
@@ -227,7 +306,7 @@ public class ChattingActivity extends AppCompatActivity {
                                             final Token item2 = snapshot.getValue(Token.class);
 
                                             //채팅보냈을때 알림
-                                            Runnable runnable = new Runnable() {
+                                            final Runnable runnable = new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -250,8 +329,10 @@ public class ChattingActivity extends AppCompatActivity {
                                                 }
                                             };
 
-                                            Thread tr = new Thread(runnable);
-                                            tr.start();
+                                            if(selllogin.equals("1") && sellalram.equals("1")){
+                                                Thread tr = new Thread(runnable);
+                                                tr.start();
+                                            }
 
                                         }
 
@@ -265,16 +346,33 @@ public class ChattingActivity extends AppCompatActivity {
 
                                     HashMap result = new HashMap<>();
 
+                                    final long t = System.currentTimeMillis();
+
                                     result.put("chatid", chatid);
                                     result.put("senderid", userid);
                                     result.put("receiverid", s2);
-                                    result.put("time", System.currentTimeMillis()+"");
+                                    result.put("time", t + "");
                                     result.put("contents", ct);
                                     result.put("isseen", false);
 
                                     reference1.setValue(result);
 
                                     input.setText("");
+
+                                    final DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("ChatList").child(chatid);
+                                    reference4.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            ChatListItem item2 = snapshot.getValue(ChatListItem.class);
+                                            item2.setTime(t+"");
+                                            reference4.setValue(item2);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
                                 else if(s2.equals(userid)){
                                     DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("UserTokenList").child(s1);
@@ -284,7 +382,7 @@ public class ChattingActivity extends AppCompatActivity {
                                             final Token item2 = snapshot.getValue(Token.class);
 
                                             //채팅보냈을때 알림
-                                            Runnable runnable = new Runnable() {
+                                            final Runnable runnable = new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -307,9 +405,10 @@ public class ChattingActivity extends AppCompatActivity {
                                                 }
                                             };
 
-
-                                            Thread tr = new Thread(runnable);
-                                            tr.start();
+                                            if(mylogin.equals("1") && myalram.equals("1")){
+                                                Thread tr = new Thread(runnable);
+                                                tr.start();
+                                            }
                                         }
 
                                         @Override

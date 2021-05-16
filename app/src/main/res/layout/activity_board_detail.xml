@@ -136,8 +136,7 @@
                     android:id="@+id/your_profile"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:clickable="true"
-                    android:background="@drawable/mypageimage" />
+                    android:clickable="true"/>
 
 
                 <LinearLayout

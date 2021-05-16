@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -23,6 +25,11 @@ import android.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -37,7 +44,7 @@ public class MainActivity2 extends AppCompatActivity {
     Button setting_btn;
 
     DrawerLayout drawerLayout;
-    LinearLayout menu1;
+    Switch aSwitch;
     LinearLayout menu2;
     LinearLayout menu3;
 
@@ -49,40 +56,100 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
-
         drawerLayout = findViewById(R.id.drawer_layout);
-        menu1 = findViewById(R.id.menu1);
+        aSwitch = findViewById(R.id.alram_switch);
         menu2 = findViewById(R.id.menu2);
         menu3 = findViewById(R.id.menu3);
 
-
-        menu1.setOnClickListener(new View.OnClickListener() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseAuth.getCurrentUser().getUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                //알림설정 기능
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersItem item = snapshot.getValue(UsersItem.class);
+                if(item.getAlram().equals("1")){
+                    aSwitch.setChecked(true);
+                }
+                else{
+                    aSwitch.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
 
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){//체크된 상태 취소시 코드
+                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseAuth.getCurrentUser().getUid());
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            UsersItem item = snapshot.getValue(UsersItem.class);
+                            item.setAlram("1");
+                            reference.setValue(item);
+                            //Toast.makeText(MainActivity2.this, "알림을 켰습니다.", Toast.LENGTH_SHORT).show();
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
+                        }
+                    });
+                }
+                else{//체크된 상태로 만들시 코드
 
-                //drawerLayout 집어넣기
-                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
-                    drawerLayout.closeDrawer(GravityCompat.END);
+                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseAuth.getCurrentUser().getUid());
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            UsersItem item = snapshot.getValue(UsersItem.class);
+                            item.setAlram("0");
+                            reference.setValue(item);
+                            //Toast.makeText(MainActivity2.this, "알림을 껐습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         });
+
         menu2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //로그아웃 기능
-                AlertDialog.Builder dlg_logout = new AlertDialog.Builder(MainActivity2.this);
+                AlertDialog.Builder dlg_logout = new AlertDialog.Builder(MainActivity2.this, R.style.MyDialogTheme);
                 dlg_logout.setTitle("로그아웃"); //제목
                 dlg_logout.setMessage("로그아웃 하시겠습니까?"); // 메시지
 
                 dlg_logout.setPositiveButton("확인",new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which) {
+
+                        final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseAuth.getCurrentUser().getUid());
+                        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                UsersItem item = snapshot.getValue(UsersItem.class);
+                                item.setLogin("0");
+                                reference1.setValue(item);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
                         MySharedPreferences.setPref(((LoginActivity)LoginActivity.context_login),"","",false);
                         mFirebaseAuth.signOut();
                         finishAffinity();
@@ -98,14 +165,13 @@ public class MainActivity2 extends AppCompatActivity {
                 dlg_logout.show();
 
 
-
-
                 //drawerLayout 집어넣기
                 if(drawerLayout.isDrawerOpen(GravityCompat.END)){
                     drawerLayout.closeDrawer(GravityCompat.END);
                 }
             }
         });
+
         menu3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

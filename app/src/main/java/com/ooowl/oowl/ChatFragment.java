@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatFragment extends Fragment {
@@ -58,6 +60,7 @@ public class ChatFragment extends Fragment {
                     }
                 }
 
+                Collections.sort(list, new Ascending());
                 adapter = new ChatAdapter(view.getContext(), list);
                 recyclerView.setAdapter(adapter);
             }
@@ -69,5 +72,14 @@ public class ChatFragment extends Fragment {
         });
 
         return view;
+    }
+
+    class Ascending implements Comparator<ChatListItem> {
+
+        @Override
+        public int compare(ChatListItem o1, ChatListItem o2) {
+            return o2.getTime().compareTo(o1.getTime());
+        }
+
     }
 }

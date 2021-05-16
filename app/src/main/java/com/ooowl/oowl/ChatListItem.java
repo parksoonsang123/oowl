@@ -6,17 +6,26 @@ public class ChatListItem {
     private String postid;
     private String myid;
     private String sellid;
+    private String time;
 
 
-    public ChatListItem(String chatid, String postid, String myid, String sellid) {
+    public ChatListItem(String chatid, String postid, String myid, String sellid, String time) {
         this.chatid = chatid;
         this.postid = postid;
         this.myid = myid;
         this.sellid = sellid;
+        this.time = time;
     }
 
     public ChatListItem() {}
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getChatid() {
         return chatid;

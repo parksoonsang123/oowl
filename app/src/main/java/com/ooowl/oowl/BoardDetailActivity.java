@@ -193,6 +193,7 @@ public class BoardDetailActivity extends AppCompatActivity {
                             result.put("postid", postid);
                             result.put("sellid", postuserid);
                             result.put("myid", userid);
+                            result.put("time", System.currentTimeMillis()+"");
 
                             reference1.setValue(result);
 

@@ -19,8 +19,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
@@ -124,6 +127,29 @@ public class LoginActivity extends AppCompatActivity {
 
                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("UserTokenList").child(uid);
                                         reference.setValue(result);
+
+                                        final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                                        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                UsersItem item = snapshot.getValue(UsersItem.class);
+                                                if(item.getAlram() == null){
+                                                    item.setAlram("1");
+                                                }
+                                                if(item.getLogin() == null){
+                                                    item.setLogin("1");
+                                                }
+                                                else{
+                                                    item.setLogin("1");
+                                                }
+                                                reference1.setValue(item);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
 
                                         Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
                                         startActivity(intent);

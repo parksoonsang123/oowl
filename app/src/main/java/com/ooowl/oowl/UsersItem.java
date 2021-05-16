@@ -10,11 +10,13 @@ public class UsersItem {
     private String follower;
     private String profileuri;
     private String profileimagename;
+    private String login;
+    private String alram;
 
     public UsersItem() {
     }
 
-    public UsersItem(String email, String idToken, String nickname, String passward, String following, String follower, String profileuri, String profileimagename) {
+    public UsersItem(String email, String idToken, String nickname, String passward, String following, String follower, String profileuri, String profileimagename, String login, String alram) {
         this.email = email;
         this.idToken = idToken;
         this.nickname = nickname;
@@ -23,6 +25,24 @@ public class UsersItem {
         this.follower = follower;
         this.profileuri = profileuri;
         this.profileimagename = profileimagename;
+        this.login = login;
+        this.alram = alram;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getAlram() {
+        return alram;
+    }
+
+    public void setAlram(String alram) {
+        this.alram = alram;
     }
 
     public String getProfileimagename() {

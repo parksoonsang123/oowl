@@ -1,5 +1,6 @@
 package com.ooowl.oowl;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -186,7 +187,11 @@ public class MyGalleryFragment extends Fragment {
                     profile.setImageResource(R.drawable.mypageimage);
                 }
                 else{
-                    Glide.with(getContext()).load(item.getProfileuri()).into(profile);
+                    Activity activity = (Activity) view.getContext();
+                    if(activity.isFinishing()){
+                        return;
+                    }
+                    Glide.with(view.getContext()).load(item.getProfileuri()).into(profile);
                 }
             }
 
