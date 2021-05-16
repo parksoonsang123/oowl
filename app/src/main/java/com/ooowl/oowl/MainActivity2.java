@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,6 +22,7 @@ import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -38,11 +41,15 @@ public class MainActivity2 extends AppCompatActivity {
     LinearLayout menu2;
     LinearLayout menu3;
 
+    FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         menu1 = findViewById(R.id.menu1);
@@ -70,7 +77,25 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //로그아웃 기능
+                AlertDialog.Builder dlg_logout = new AlertDialog.Builder(MainActivity2.this);
+                dlg_logout.setTitle("로그아웃"); //제목
+                dlg_logout.setMessage("로그아웃 하시겠습니까?"); // 메시지
 
+                dlg_logout.setPositiveButton("확인",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        MySharedPreferences.setPref(((LoginActivity)LoginActivity.context_login),"","",false);
+                        mFirebaseAuth.signOut();
+                        finishAffinity();
+                        startActivity(new Intent(MainActivity2.this,LoginActivity.class));
+                    }
+                });
+                dlg_logout.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dlg_logout.show();
 
 
 
