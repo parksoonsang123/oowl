@@ -181,7 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"
                     android:track="@drawable/switch_track_selector"
-                    android:thumb="@drawable/switch_thumb"
+                    android:thumb="@drawable/switch_thumb2"
                     android:layout_marginRight="10dp"/>
 
 
