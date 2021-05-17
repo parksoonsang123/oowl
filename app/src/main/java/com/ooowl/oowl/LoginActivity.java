@@ -133,15 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 UsersItem item = snapshot.getValue(UsersItem.class);
-                                                if(item.getAlram() == null){
-                                                    item.setAlram("1");
-                                                }
-                                                if(item.getLogin() == null){
-                                                    item.setLogin("1");
-                                                }
-                                                else{
-                                                    item.setLogin("1");
-                                                }
+                                                item.setLogin("1");
                                                 reference1.setValue(item);
                                             }
 

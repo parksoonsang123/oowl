@@ -34,6 +34,7 @@ public class YourGallery extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<String> arrayList = new ArrayList<>();
+    private ArrayList<String> arrayList2 = new ArrayList<>();
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -77,6 +78,7 @@ public class YourGallery extends AppCompatActivity {
                     profile.setImageResource(R.drawable.mypageimage);
                 }
                 else{
+                    //java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
                     Glide.with(YourGallery.this).load(item.getProfileuri()).into(profile);
                 }
             }
@@ -190,20 +192,15 @@ public class YourGallery extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     PostItem postItem = snapshot.getValue(PostItem.class);
                     if(postItem.getUserid().equals(yourid)){
-                        for(int i=0;i<postItem.getImageurilist().size();i++){
-                            arrayList.add(postItem.getImageurilist().get(i));
-                        }
+                        arrayList.add(postItem.getImageurilist().get(0));
+                        arrayList2.add(postItem.getPostid());
                         mg_id.setText(postItem.getNickname());
                     }
                 }
 
-                adapter = new GalleryAdapter(arrayList, getApplicationContext());
+                adapter = new GalleryAdapter(arrayList, arrayList2, getApplicationContext());
 
                 recyclerView.setAdapter(adapter);
-
-
-
-
 
             }
             @Override

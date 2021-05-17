@@ -275,6 +275,11 @@
                         android:text="주소 입력"
                         android:textColor="#000000" />
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
                     <EditText
                         android:id="@+id/address"
                         android:layout_marginLeft="10dp"

@@ -89,37 +89,37 @@ public class ChattingActivity extends AppCompatActivity {
         final String chatid = intent.getStringExtra("chatid");
 
 
+        if(sellid != null && myid != null){
+            DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
+            reference2.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UsersItem item3 = snapshot.getValue(UsersItem.class);
+                    selllogin = item3.getLogin();
+                    sellalram = item3.getAlram();
+                }
 
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
-        reference2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UsersItem item3 = snapshot.getValue(UsersItem.class);
-                selllogin = item3.getLogin();
-                sellalram = item3.getAlram();
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-            }
-        });
+            DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(myid);
+            reference3.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UsersItem item3 = snapshot.getValue(UsersItem.class);
+                    mylogin = item3.getLogin();
+                    myalram = item3.getAlram();
+                }
 
-        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Users").child(sellid);
-        reference3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UsersItem item3 = snapshot.getValue(UsersItem.class);
-                mylogin = item3.getLogin();
-                myalram = item3.getAlram();
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+                }
+            });
+        }
 
         recyclerView = findViewById(R.id.rv_content);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

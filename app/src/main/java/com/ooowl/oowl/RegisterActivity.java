@@ -75,6 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         account.setNickname(strNick);
                                         account.setFollower("0");
                                         account.setFollowing("0");
+                                        account.setAlram("1");
+                                        account.setLogin("0");
 
                                         //  setValue : database에 insert (삽입) 행위
                                         mDatabaseRef.child(firebaseUser.getUid()).setValue(account);

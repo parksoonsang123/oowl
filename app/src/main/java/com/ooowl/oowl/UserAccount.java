@@ -9,8 +9,26 @@ public class UserAccount {
     private String Nickname;
     private String following;
     private String follower;
+    private String login;
+    private String alram;
 
     public UserAccount() {  }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getAlram() {
+        return alram;
+    }
+
+    public void setAlram(String alram) {
+        this.alram = alram;
+    }
 
     public String getFollowing() {
         return following;

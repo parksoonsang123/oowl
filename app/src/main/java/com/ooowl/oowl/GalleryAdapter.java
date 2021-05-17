@@ -23,10 +23,12 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
     private ArrayList<String> arrayList;
+    private ArrayList<String> arrayList2;
     private Context context;
 
-    public GalleryAdapter(ArrayList<String> arrayList, Context context) {
+    public GalleryAdapter(ArrayList<String> arrayList, ArrayList<String> arrayList2, Context context) {
         this.arrayList = arrayList;
+        this.arrayList2 = arrayList2;
         this.context = context;
     }
 
@@ -70,21 +72,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 @Override
                 public void onClick(final View v) {
                     final int pos = getAdapterPosition();
-                    final DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Post");
+                    final DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Post").child(arrayList2.get(pos));
                     reference2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for(DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                PostItem postItem1 = snapshot1.getValue(PostItem.class);
-                                if(("["+arrayList.get(pos)+"]").equals(postItem1.getImageurilist().toString())) {
-                                    Intent intent = new Intent(v.getContext(), BoardDetailActivity.class);
-                                    intent.putExtra("pid", postItem1.getPostid());
-                                    intent.putExtra("uid", postItem1.getUserid());
-                                    v.getContext().startActivity(intent);
-                                    break;
-                                }
-
-                            }
+                            PostItem postItem1 = snapshot.getValue(PostItem.class);
+                            Intent intent = new Intent(v.getContext(), BoardDetailActivity.class);
+                            intent.putExtra("pid", postItem1.getPostid());
+                            intent.putExtra("uid", postItem1.getUserid());
+                            v.getContext().startActivity(intent);
                         }
 
                         @Override

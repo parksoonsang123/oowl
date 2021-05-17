@@ -55,6 +55,7 @@ public class MyGalleryFragment extends Fragment {
     private GalleryAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<String> arrayList;
+    private ArrayList<String> arrayList2;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -89,6 +90,7 @@ public class MyGalleryFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         arrayList = new ArrayList<>();
+        arrayList2 = new ArrayList<>();
 
         userid = mAuth.getUid();
         mg_id = view.findViewById(R.id.mg_id);
@@ -109,14 +111,12 @@ public class MyGalleryFragment extends Fragment {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     PostItem postItem = snapshot.getValue(PostItem.class);
                     if(postItem.getUserid().equals(userid)){
-                        for(int i=0;i<postItem.getImageurilist().size();i++){
-                            arrayList.add(postItem.getImageurilist().get(i));
-                        }
-                        mg_id.setText(postItem.getNickname());
+                        arrayList.add(postItem.getImageurilist().get(0));
+                        arrayList2.add(postItem.getPostid());
                     }
                 }
 
-                adapter = new GalleryAdapter(arrayList, view.getContext());
+                adapter = new GalleryAdapter(arrayList, arrayList2, view.getContext());
 
                 recyclerView.setAdapter(adapter);
 
@@ -183,6 +183,7 @@ public class MyGalleryFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UsersItem item = snapshot.getValue(UsersItem.class);
+                mg_id.setText(item.getNickname());
                 if(item.getProfileuri() == null){
                     profile.setImageResource(R.drawable.mypageimage);
                 }
@@ -200,9 +201,6 @@ public class MyGalleryFragment extends Fragment {
 
             }
         });
-
-
-
 
 
         btn_fer = view.findViewById(R.id.btn_fer);
