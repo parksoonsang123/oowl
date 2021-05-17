@@ -9,9 +9,6 @@
     tools:context=".MainActivity2">
 
     <androidx.drawerlayout.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -97,8 +94,6 @@
         </LinearLayout>
 
 
-
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -106,34 +101,63 @@
             android:layout_gravity="right"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:padding="15dp"
-                android:layout_width="250dp"
-                android:layout_height="300dp"
-                android:background="#FCB955"
-                android:gravity="bottom"
+            <FrameLayout
+                android:layout_width="230dp"
+                android:layout_height="80dp"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/logo"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/orange_background"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="올 빼 미"
-                    android:textStyle="bold"
-                    android:textSize="20dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="#FFC107"
+                    android:padding="15dp"
+                    android:gravity="bottom">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="모든 빼어난 미술품의 모임"
-                    android:textStyle="bold"
-                    android:textSize="12dp"/>
+                  <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                      android:layout_gravity="center_vertical"
+                        android:src="@drawable/logo"/>
 
-            </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="올 빼 미"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="5dp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:textSize="17dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="모든 빼어난 미술품의 모임"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="8dp"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </FrameLayout>
 
             <TextView
                 android:layout_width="match_parent"
