@@ -102,8 +102,8 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:layout_width="230dp"
-                android:layout_height="80dp"
+                android:layout_width="240dp"
+                android:layout_height="120dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -117,36 +117,36 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:background="#FFC107"
-                    android:padding="15dp"
+                    android:padding="10dp"
                     android:gravity="bottom">
 
                   <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                      android:layout_gravity="center_vertical"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_vertical"
                         android:src="@drawable/logo"/>
 
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="올 빼 미"
-                            android:layout_marginLeft="8dp"
+
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="5dp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
-                            android:textSize="17dp"/>
+                            android:textSize="20dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="모든 빼어난 미술품의 모임"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginLeft="8dp"
                             android:textColor="#FFFFFF"
                             android:textSize="12dp"
                             android:textStyle="bold" />
@@ -159,110 +159,119 @@
 
             </FrameLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="설정"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:background="@drawable/itemborder"/>
-
             <LinearLayout
-                android:layout_marginTop="10dp"
-                android:id="@+id/menu1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="4dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_notifications_24"/>
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="알림설정"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="15dp"
-                    android:layout_gravity="center"
-                    android:textColor="#000000"/>
+                    android:padding="15dp"
+                    android:text="설정"
+                    android:textColor="#000000"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:background="@drawable/itemborder"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <Switch
-                    android:layout_gravity="center"
-                    android:id="@+id/alram_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"
-                    android:track="@drawable/switch_track_selector"
-                    android:thumb="@drawable/switch_thumb2"
-                    android:layout_marginRight="10dp"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu2"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="4dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_exit_to_app_24"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/menu1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="로그아웃"
-                    android:textSize="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center"
-                    android:textColor="#000000"/>
+                    android:clickable="true"
+                    android:padding="4dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_baseline_notifications_24"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="알림설정"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="15dp"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <Switch
+                        android:layout_gravity="center"
+                        android:id="@+id/alram_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:track="@drawable/switch_track_selector"
+                        android:thumb="@drawable/switch_thumb2"
+                        android:layout_marginRight="10dp"/>
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/menu3"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="4dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_cancel_24"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/menu2"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="회원탈퇴"
-                    android:textSize="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center"
-                    android:textColor="#000000"/>
+                    android:clickable="true"
+                    android:padding="4dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_baseline_exit_to_app_24"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="로그아웃"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/menu3"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="4dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_baseline_cancel_24"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="회원탈퇴"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"/>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 

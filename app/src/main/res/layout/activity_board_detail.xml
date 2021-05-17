@@ -319,14 +319,15 @@
 
     <LinearLayout
         android:background="@drawable/itemborder2"
-        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/jjim"
             android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/heart2"/>
@@ -342,6 +343,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가격"
+            android:layout_gravity="center"
             android:textSize="20dp"
             android:textColor="#000000"
             android:textStyle="bold"/>
@@ -352,12 +354,15 @@
             android:layout_weight="10"/>
 
         <Button
+            android:layout_marginVertical="10dp"
             android:id="@+id/chat"
             android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:background="@drawable/background_rounding6"
             android:textSize="17dp"
+            android:textStyle="bold"
             android:text="채팅거래"/>
 
 
