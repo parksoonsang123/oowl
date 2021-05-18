@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".OnlyImage"></activity>
+        <activity android:name=".EditDialog"></activity>
+        <activity android:name=".OnlyImage" />
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".SplashActivity"

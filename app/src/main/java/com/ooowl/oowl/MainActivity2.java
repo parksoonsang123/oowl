@@ -53,10 +53,12 @@ public class MainActivity2 extends AppCompatActivity {
     Switch aSwitch;
     LinearLayout menu2;
     LinearLayout menu3;
+    LinearLayout menu4;
+
+    LinearLayout menu11;
+    LinearLayout menu12;
 
     FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-
-    private int finish = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,10 @@ public class MainActivity2 extends AppCompatActivity {
         aSwitch = findViewById(R.id.alram_switch);
         menu2 = findViewById(R.id.menu2);
         menu3 = findViewById(R.id.menu3);
+        menu4 = findViewById(R.id.menu4);
+
+        menu12 = findViewById(R.id.menu12);
+        menu11 = findViewById(R.id.menu11);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseAuth.getCurrentUser().getUid());
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -202,6 +208,52 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                 });
                 signout.show();
+
+                //drawerLayout 집어넣기
+                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                }
+            }
+        });
+
+        menu4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //문의하기
+
+
+
+
+
+                //drawerLayout 집어넣기
+                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                }
+            }
+        });
+
+        menu11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //닉네임 변경하기
+
+                EditDialog editDialog = new EditDialog(MainActivity2.this, mFirebaseAuth.getCurrentUser().getUid());
+                editDialog.show();
+
+                //drawerLayout 집어넣기
+                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                }
+            }
+        });
+
+        menu12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //비밀번호 변경하기
+
+                EditDialog2 editDialog2 = new EditDialog2(MainActivity2.this, mFirebaseAuth.getCurrentUser().getUid());
+                editDialog2.show();
 
                 //drawerLayout 집어넣기
                 if(drawerLayout.isDrawerOpen(GravityCompat.END)){
