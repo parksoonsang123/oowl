@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +66,7 @@ public class BoardDetailActivity extends AppCompatActivity {
     TextView price;
 
     ViewPager viewPager;
+    BoardDetailViewPagerAdapter adapter;
 
     Button jjim;
 
@@ -117,12 +119,14 @@ public class BoardDetailActivity extends AppCompatActivity {
         del = findViewById(R.id.detail_del);
         chat = findViewById(R.id.chat);
 
+        viewPager = findViewById(R.id.detail_viewpager);
+
         if(!userid.equals(postuserid)){
             remake.setVisibility(View.GONE);
             del.setVisibility(View.GONE);
         }
         else{
-            chat.setVisibility(View.GONE);
+            chat.setVisibility(View.INVISIBLE);
         }
 
 
@@ -293,23 +297,6 @@ public class BoardDetailActivity extends AppCompatActivity {
 
                             jjim.setBackgroundResource(R.drawable.heart2);
                             jjimminus(postid);
-
-                            /*if(item.getPress().equals("1")){
-                                HashMap result = new HashMap<>();
-                                result.put("press", "0");
-                                reference2.setValue(result);
-
-                                jjim.setBackgroundResource(R.drawable.heart2);
-                                jjimminus(postid);
-                            }
-                            else{
-                                HashMap result = new HashMap<>();
-                                result.put("press", "1");
-                                reference2.setValue(result);
-
-                                jjim.setBackgroundResource(R.drawable.heart);
-                                jjimplus(postid);
-                            }*/
                         }
 
 
@@ -334,12 +321,6 @@ public class BoardDetailActivity extends AppCompatActivity {
                 }
                 else{
                     jjim.setBackgroundResource(R.drawable.heart);
-                    /*if(item.getPress().equals("1")){
-                        jjim.setBackgroundResource(R.drawable.heart);
-                    }
-                    else{
-                        jjim.setBackgroundResource(R.drawable.heart2);
-                    }*/
                 }
             }
 
@@ -354,7 +335,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                PostItem item = snapshot.getValue(PostItem.class);
+                final PostItem item = snapshot.getValue(PostItem.class);
                 nick.setText(item.getNickname());
 
                 Long t = Long.parseLong(item.getWritetime());
@@ -401,10 +382,6 @@ public class BoardDetailActivity extends AppCompatActivity {
                 }
                 price.setText(ppp);
 
-
-                viewPager = findViewById(R.id.detail_viewpager);
-                ImageFragmentAdapter fragmentAdapter = new ImageFragmentAdapter(getSupportFragmentManager());
-
                 final int size = item.getImageurilist().size();
 
                 if(size == 1){
@@ -443,17 +420,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                     btn[4].setVisibility(View.VISIBLE);
                 }
 
-                ImageFragment[] imageFragment = new ImageFragment[5];
-                for(int i=0;i<size;i++){
-                    imageFragment[i] = new ImageFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("imgRes", item.getImageurilist().get(i));
-                    imageFragment[i].setArguments(bundle);
-                    fragmentAdapter.addItem(imageFragment[i]);
-                }
-                fragmentAdapter.notifyDataSetChanged();
-
-                viewPager.setAdapter(fragmentAdapter);
+                adapter = new BoardDetailViewPagerAdapter(getApplicationContext(), item.getImageurilist(), item.getPostid());
+                viewPager.setAdapter(adapter);
 
                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -463,7 +431,6 @@ public class BoardDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onPageSelected(int position) {
-
                         for(int i=0;i<size;i++){
                             if(i != position){
                                 btn[i].setBackgroundResource(R.drawable.btn2);
@@ -472,7 +439,6 @@ public class BoardDetailActivity extends AppCompatActivity {
                                 btn[i].setBackgroundResource(R.drawable.btn1);
                             }
                         }
-
                     }
 
                     @Override
@@ -480,9 +446,6 @@ public class BoardDetailActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-
 
             }
 

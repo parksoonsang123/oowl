@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".OnlyImage"></activity>
+        <activity android:name=".SearchActivity" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -26,28 +27,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JjimMenu"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FollowingMenu"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FollowerMenu"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".YourGallery"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ChattingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FindActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegisterActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BoardDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WriteBoardActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity2"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".JjimMenu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FollowingMenu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FollowerMenu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".YourGallery"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChattingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BoardDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WriteBoardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".Notification.FirebaseNotificationService">
             <intent-filter>

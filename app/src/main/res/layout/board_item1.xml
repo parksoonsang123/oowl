@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/board_image"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:layout_width="120dp"
         android:layout_height="120dp"/>
 

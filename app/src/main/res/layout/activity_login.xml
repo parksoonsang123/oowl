@@ -70,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="#0F0F0F"
+            android:buttonTint="#BD7E07"
             android:text="자동 로그인"
             android:textSize="15dp"/>
 

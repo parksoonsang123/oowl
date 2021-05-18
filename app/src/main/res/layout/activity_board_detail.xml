@@ -20,11 +20,14 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/detail_frame"
+                android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="350dp">
 
 
                 <androidx.viewpager.widget.ViewPager
+                    android:clickable="true"
                     android:id="@+id/detail_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="350dp"/>
