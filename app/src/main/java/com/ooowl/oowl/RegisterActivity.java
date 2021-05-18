@@ -16,8 +16,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseRef; //실시간 데이터베이스
     private EditText mEtEmail, mEtPwd, mEtNick;
     private Button mBtnRegister;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //회원가입 처리 시작
-                String strEmail = mEtEmail.getText().toString().trim();
+                final String strEmail = mEtEmail.getText().toString().trim();
                 final String strPwd = mEtPwd.getText().toString();
                 final String strNick = mEtNick.getText().toString();
                 if(TextUtils.isEmpty(strEmail)){
@@ -58,63 +62,92 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "닉네임을 입력해 주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //Firebase Auth 진행
-                mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                //닉네임 중복체크
+                int flag=0;
+                reference = FirebaseDatabase.getInstance().getReference("Users");
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
-                            firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int flag = 0;
+                        for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                            PostItem item1 = snapshot1.getValue(PostItem.class); // 만들어 뒀던 PostItem 객체에 데이터를 담는다
+                            String nick = item1.getNickname();
+                            if(strNick.equals(nick)){
+                                mEtNick.setError("중복되는 닉네임입니다.");
+                                mEtNick.requestFocus();
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag==1){ return; }
+                        else{
+                            //Firebase Auth 진행
+                            mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
-                                        UserAccount account = new UserAccount();
-                                        account.setIdToken(firebaseUser.getUid());
-                                        account.setEmail(firebaseUser.getEmail());
-                                        account.setPassword(strPwd);
-                                        account.setNickname(strNick);
-                                        account.setFollower("0");
-                                        account.setFollowing("0");
-                                        account.setAlram("1");
-                                        account.setLogin("0");
+                                        final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+                                        firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    UserAccount account = new UserAccount();
+                                                    account.setIdToken(firebaseUser.getUid());
+                                                    account.setEmail(firebaseUser.getEmail());
+                                                    account.setPassword(strPwd);
+                                                    account.setNickname(strNick);
+                                                    account.setFollower("0");
+                                                    account.setFollowing("0");
+                                                    account.setAlram("1");
+                                                    account.setLogin("0");
 
-                                        //  setValue : database에 insert (삽입) 행위
-                                        mDatabaseRef.child(firebaseUser.getUid()).setValue(account);
+                                                    //  setValue : database에 insert (삽입) 행위
+                                                    mDatabaseRef.child(firebaseUser.getUid()).setValue(account);
 
-                                        Toast.makeText(RegisterActivity.this, "인증 이메일이 전송되었습니다.\n확인 후 로그인 해주세요!", Toast.LENGTH_LONG).show();
-                                        finish();
-                                    }
-                                    else{
-                                        Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(RegisterActivity.this, "인증 이메일이 전송되었습니다.\n확인 후 로그인 해주세요!", Toast.LENGTH_LONG).show();
+                                                    finish();
+                                                }
+                                                else{
+                                                    Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    } else{
+                                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                        switch (errorCode) {
+
+                                            case "ERROR_INVALID_EMAIL":
+                                                mEtEmail.setError("이메일 형식에 맞게 다시 입력해주세요!");
+                                                mEtEmail.requestFocus();
+                                                break;
+
+                                            case "ERROR_EMAIL_ALREADY_IN_USE":
+                                                mEtEmail.setError("이미 사용중인 이메일입니다!");
+                                                mEtEmail.requestFocus();
+                                                break;
+
+                                            case "ERROR_WEAK_PASSWORD":
+                                                mEtPwd.setError("비밀번호를 6자리 이상 설정해주세요!");
+                                                mEtPwd.requestFocus();
+                                                break;
+
+                                            default:
+                                                Toast.makeText(RegisterActivity.this, "실패하였습니다. 다시 입력해주세요!\n" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                break;
+                                        }
                                     }
                                 }
                             });
-                        } else{
-                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                            switch (errorCode) {
-
-                                case "ERROR_INVALID_EMAIL":
-                                    mEtEmail.setError("이메일 형식에 맞게 다시 입력해주세요!");
-                                    mEtEmail.requestFocus();
-                                    break;
-
-                                case "ERROR_EMAIL_ALREADY_IN_USE":
-                                    mEtEmail.setError("이미 사용중인 이메일입니다!");
-                                    mEtEmail.requestFocus();
-                                    break;
-
-                                case "ERROR_WEAK_PASSWORD":
-                                    mEtPwd.setError("비밀번호를 6자리 이상 설정해주세요!");
-                                    mEtPwd.requestFocus();
-                                    break;
-
-                                default:
-                                    Toast.makeText(RegisterActivity.this, "실패하였습니다. 다시 입력해주세요!\n" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                    break;
-                            }
                         }
                     }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
                 });
+
+
             }
         });
     }
