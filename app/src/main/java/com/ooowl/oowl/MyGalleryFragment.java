@@ -267,7 +267,7 @@ public class MyGalleryFragment extends Fragment {
 
         layout2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {   //프로필 사진 삭제
+            public void onClick(final View v) {   //프로필 사진 삭제
                 final DatabaseReference reference6 = FirebaseDatabase.getInstance().getReference("Users").child(userid);
                 reference6.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -281,7 +281,10 @@ public class MyGalleryFragment extends Fragment {
                             item.setProfileuri(null);
                             item.setProfileimagename(null);
                             reference6.setValue(item);
-                            normal_dialog.dismiss();
+
+                        }
+                        else{
+                            Toast.makeText(v.getContext(), "프로필 사진이 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
