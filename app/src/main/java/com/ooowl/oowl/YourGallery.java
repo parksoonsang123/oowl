@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -79,6 +80,11 @@ public class YourGallery extends AppCompatActivity {
                 }
                 else{
                     //java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
+                    Activity activity = YourGallery.this;
+                    if(activity.isFinishing()){
+                        return;
+                    }
+
                     Glide.with(YourGallery.this).load(item.getProfileuri()).into(profile);
                 }
             }

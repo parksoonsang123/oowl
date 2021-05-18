@@ -46,10 +46,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        /*GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) holder.mg_image.getLayoutParams();
-        layoutParams.height = layoutParams.width;
-        holder.mg_image.requestLayout();*/
-
         Glide.with(context)
                 .load(arrayList.get(position))
                 .into(holder.mg_image);
