@@ -397,6 +397,10 @@ public class BoardDetailActivity extends AppCompatActivity {
                     btn[2].setVisibility(View.GONE);
                     btn[3].setVisibility(View.GONE);
                     btn[4].setVisibility(View.GONE);
+
+                    btn[0].getLayoutParams().height = 30;
+                    btn[0].getLayoutParams().width = 30;
+                    btn[0].requestLayout();
                 }
                 else if(size == 3){
                     btn[0].setVisibility(View.VISIBLE);
@@ -404,6 +408,10 @@ public class BoardDetailActivity extends AppCompatActivity {
                     btn[2].setVisibility(View.VISIBLE);
                     btn[3].setVisibility(View.GONE);
                     btn[4].setVisibility(View.GONE);
+
+                    btn[0].getLayoutParams().height = 30;
+                    btn[0].getLayoutParams().width = 30;
+                    btn[0].requestLayout();
                 }
                 else if(size == 4){
                     btn[0].setVisibility(View.VISIBLE);
@@ -411,6 +419,10 @@ public class BoardDetailActivity extends AppCompatActivity {
                     btn[2].setVisibility(View.VISIBLE);
                     btn[3].setVisibility(View.VISIBLE);
                     btn[4].setVisibility(View.GONE);
+
+                    btn[0].getLayoutParams().height = 30;
+                    btn[0].getLayoutParams().width = 30;
+                    btn[0].requestLayout();
                 }
                 else if(size == 5){
                     btn[0].setVisibility(View.VISIBLE);
@@ -418,6 +430,10 @@ public class BoardDetailActivity extends AppCompatActivity {
                     btn[2].setVisibility(View.VISIBLE);
                     btn[3].setVisibility(View.VISIBLE);
                     btn[4].setVisibility(View.VISIBLE);
+
+                    btn[0].getLayoutParams().height = 30;
+                    btn[0].getLayoutParams().width = 30;
+                    btn[0].requestLayout();
                 }
 
                 adapter = new BoardDetailViewPagerAdapter(getApplicationContext(), item.getImageurilist(), item.getPostid());
@@ -434,9 +450,15 @@ public class BoardDetailActivity extends AppCompatActivity {
                         for(int i=0;i<size;i++){
                             if(i != position){
                                 btn[i].setBackgroundResource(R.drawable.btn2);
+                                btn[i].getLayoutParams().height = 25;
+                                btn[i].getLayoutParams().width = 25;
+                                btn[i].requestLayout();
                             }
                             else{
                                 btn[i].setBackgroundResource(R.drawable.btn1);
+                                btn[i].getLayoutParams().height = 30;
+                                btn[i].getLayoutParams().width = 30;
+                                btn[i].requestLayout();
                             }
                         }
                     }
