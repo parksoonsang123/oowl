@@ -14,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         try {
-            Thread.sleep(2500); //대기 초 설정
+            Thread.sleep(2000); //대기 초 설정
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             finish();
         } catch (Exception e) {

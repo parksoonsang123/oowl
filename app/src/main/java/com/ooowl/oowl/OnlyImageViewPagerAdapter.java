@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
 
@@ -34,9 +35,12 @@ public class OnlyImageViewPagerAdapter extends PagerAdapter {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.onlyimage_viewpager_item, container, false);
 
-            ImageView imageView = (ImageView)view.findViewById(R.id.onlyimage_vp_item);
-            Glide.with(view).load(mDataList.get(position)).into(imageView);
+            //ImageView imageView = (ImageView)view.findViewById(R.id.onlyimage_vp_item);
 
+            //https://github.com/chrisbanes/PhotoView 라이브러리 가져와서씀
+            PhotoView imageView = (PhotoView) view.findViewById(R.id.onlyimage_vp_item);
+
+            Glide.with(view).load(mDataList.get(position)).into(imageView);
         }
 
         container.addView(view);

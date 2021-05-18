@@ -9,9 +9,36 @@
     tools:context=".YourGallery">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/your_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:clickable="true"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/your_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#000000"
+            android:text="닉네임"
+            android:textSize="20dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:background="@drawable/itemborder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -114,14 +141,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/your_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textColor="#000000"
-            android:text="닉네임"
-            android:textSize="20sp" />
+
 
     </LinearLayout>
 

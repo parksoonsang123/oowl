@@ -16,7 +16,4 @@
         android:icon="@drawable/mygallery"
         android:title="마이 갤러리"/>
 
-
-
-
 </menu>

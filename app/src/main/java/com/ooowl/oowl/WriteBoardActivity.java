@@ -174,6 +174,12 @@ public class WriteBoardActivity extends AppCompatActivity {
         completebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(writetitle.getText().toString().equals("") || writetitle.getText().toString() == null){
+                    Toast.makeText(WriteBoardActivity.this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int select1 = rg1.getCheckedRadioButtonId();
                 int select2 = rg2.getCheckedRadioButtonId();
                 int select3 = rg3.getCheckedRadioButtonId();
@@ -188,7 +194,6 @@ public class WriteBoardActivity extends AppCompatActivity {
                     Toast.makeText(WriteBoardActivity.this, "직거래 가능 여부를 체크해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
 
                 cnt = 0;
                 list2.clear();
