@@ -10,13 +10,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:orientation="vertical">
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="30dp"
             android:text="회원가입"
             android:textColor="#000000"
@@ -24,12 +25,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
             android:text="회원가입을 하신 후 가입하신 이메일로 인증 메일이 발송되며, 이메일 인증 완료 후 올빼미를 이용하실 수 있습니다."
             android:textColor="#000000" />
 
@@ -43,27 +44,32 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+
         <EditText
             android:id="@+id/et_email"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="90dp"
             android:ems="12"
-            android:theme="@style/EditTheme"
             android:hint="E-Mail"
+            android:padding="13dp"
+            android:background="@drawable/background_rounding3"
             android:inputType="textEmailAddress"
             android:textColor="#000000"
-            android:textColorHint="#808080" />
-
+            android:textColorHint="#808080"
+            android:theme="@style/EditTheme" />
 
         <EditText
             android:id="@+id/et_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="12"
             android:theme="@style/EditTheme"
+            android:padding="13dp"
+            android:background="@drawable/background_rounding3"
+            android:layout_marginTop="10dp"
             android:hint="Password (6자리 이상)"
             android:inputType="textPassword"
             android:textColor="#000000"
@@ -71,11 +77,14 @@
 
         <EditText
             android:id="@+id/et_nick"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="12"
             android:hint="닉네임"
+            android:layout_marginTop="10dp"
+            android:padding="13dp"
+            android:background="@drawable/background_rounding3"
             android:theme="@style/EditTheme"
             android:inputType="textPersonName"
             android:textColor="#000000"
@@ -83,10 +92,13 @@
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_width="196dp"
+            android:layout_width="180dp"
             android:layout_height="49dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/background_rounding8"
+            android:textStyle="bold"
+            android:textSize="18dp"
             android:text="회원가입" />
 
     </LinearLayout>

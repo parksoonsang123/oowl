@@ -29,6 +29,7 @@
             android:layout_marginRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_gravity="center"
             android:text="등록하신 이메일을 입력하신 후 '이메일 발송' 버튼을 클릭하시면 비밀번호 변경 메일이 발송됩니다."
             android:textColor="#000000" />
@@ -47,17 +48,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="150dp"
+            android:layout_marginBottom="20dp"
             android:text="등록한 이메일을 입력해주세요!"
             android:textColor="#000000"
             android:textSize="20dp" />
 
         <EditText
             android:id="@+id/et_email"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="3dp"
+            android:padding="13dp"
             android:ems="12"
+            android:background="@drawable/background_rounding3"
             android:hint="E-Mail"
             android:theme="@style/EditTheme"
             android:inputType="textEmailAddress"
@@ -66,10 +69,13 @@
 
         <Button
             android:id="@+id/btn_find"
-            android:layout_width="196dp"
+            android:layout_width="180dp"
             android:layout_height="49dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="35dp"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:background="@drawable/background_rounding8"
             android:text="이메일 발송" />
 
     </LinearLayout>
