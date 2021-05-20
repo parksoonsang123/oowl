@@ -59,6 +59,7 @@
             android:layout_marginTop="3dp"
             android:ems="12"
             android:hint="E-Mail"
+            android:theme="@style/EditTheme"
             android:inputType="textEmailAddress"
             android:textColor="#000000"
             android:textColorHint="#808080" />

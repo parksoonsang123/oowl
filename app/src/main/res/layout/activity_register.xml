@@ -50,6 +50,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="90dp"
             android:ems="12"
+            android:theme="@style/EditTheme"
             android:hint="E-Mail"
             android:inputType="textEmailAddress"
             android:textColor="#000000"
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="12"
+            android:theme="@style/EditTheme"
             android:hint="Password (6자리 이상)"
             android:inputType="textPassword"
             android:textColor="#000000"
@@ -74,6 +76,7 @@
             android:layout_gravity="center"
             android:ems="12"
             android:hint="닉네임"
+            android:theme="@style/EditTheme"
             android:inputType="textPersonName"
             android:textColor="#000000"
             android:textColorHint="#808080" />

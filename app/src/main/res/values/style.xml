@@ -27,4 +27,13 @@
             name="android:windowBackground">@drawable/splash_backgroud</item>
     </style>
 
+    <style name="EditTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/orange</item>
+        <item name="colorControlActivated">@color/orange</item>
+        <item name="colorControlNormal">@color/lightgray</item>
+        <item name="android:textSelectHandle">@color/orange</item>
+        <item name="android:textColorHighlight">@color/orange</item>
+        <item name="android:textCursorDrawable">@color/orange</item>
+    </style>
+
 </resources>
