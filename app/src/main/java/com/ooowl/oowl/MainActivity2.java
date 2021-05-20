@@ -377,10 +377,9 @@ public class MainActivity2 extends AppCompatActivity {
                     jjimminus(postlist.get(i), i, postlist.size()-1, userid);
                 }
 
-                /*if(i == postlist.size()){
-                    reference.removeValue();
+                if(postlist.size() == 0){
                     followdelete(userid);
-                }*/
+                }
             }
 
             @Override
@@ -429,11 +428,9 @@ public class MainActivity2 extends AppCompatActivity {
                     youfollowerminus(followlist.get(i), i, followlist.size()-1, userid);
                 }
 
-                /*if(i == followlist.size()){
-                    reference.removeValue();
+                if(followlist.size() == 0){
                     followerdelete(userid);
-                }*/
-
+                }
             }
 
             @Override
@@ -520,13 +517,11 @@ public class MainActivity2 extends AppCompatActivity {
                 int i=0;
                 for(i=0;i<followerlist.size();i++){
                     youfollowingminus(followerlist.get(i), userid, i, followerlist.size()-1, followerlist);
-                    //followdelete2(userid, followerlist.get(i));
                 }
 
-                /*if(i == followerlist.size()){
-                    reference.removeValue();
+                if(followerlist.size() == 0){
                     chatlistdelete(userid);
-                }*/
+                }
             }
 
             @Override
@@ -577,13 +572,11 @@ public class MainActivity2 extends AppCompatActivity {
                 int i=0;
                 for(i=0;i<chatlist.size();i++){
                     chatlistdelete2(chatlist.get(i), i, chatlist.size()-1, chatlist, userid, postlist);
-                    //chatdelete(chatlist.get(i));
                 }
 
-                /*if(i == chatlist.size()){
+                if(chatlist.size() == 0){
                     postdelete(userid);
-                }*/
-
+                }
             }
 
             @Override
@@ -647,7 +640,6 @@ public class MainActivity2 extends AppCompatActivity {
                     PostItem item = snapshot1.getValue(PostItem.class);
                     if(item.getUserid().equals(userid)){
                         for(int i=0;i<item.getImagenamelist().size();i++){
-                            //imagedelete(item.getImagenamelist().get(i));
                             FirebaseStorage storage = FirebaseStorage.getInstance();
                             StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("images/"+item.getImagenamelist().get(i));
                             storageRef.delete();
@@ -660,18 +652,9 @@ public class MainActivity2 extends AppCompatActivity {
                     jjimdelete2(postlist.get(i), i, postlist.size()-1, postlist, userid);
                 }
 
-                /*if(i == postlist.size()){
-                    int j = 0;
-                    for(j=0;j<postlist.size();j++){
-                        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Post").child(postlist.get(j));
-                        reference2.removeValue();
-                    }
-
-                    if(j == postlist.size()){
-                        UserTokenListdelete(userid);
-                    }
-
-                }*/
+                if(postlist.size() == 0){
+                    UserTokenListdelete(userid);
+                }
             }
 
             @Override
@@ -701,7 +684,6 @@ public class MainActivity2 extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UsersItem item = snapshot.getValue(UsersItem.class);
                 if(item.getProfileimagename() != null){
-                    //imagedelete(item.getProfileimagename());
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReferenceFromUrl("gs://oowl-d90e9.appspot.com").child("images/"+item.getProfileimagename());
                     storageRef.delete();
