@@ -1,5 +1,6 @@
 package com.ooowl.oowl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder>{
     private ArrayList<String> arrayList;
@@ -48,6 +51,11 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
                 UsersItem usersItem = snapshot.getValue(UsersItem.class);
                 holder.nickname.setText(usersItem.getNickname());
                 holder.follow_cnt.setText(usersItem.getFollower());
+
+                if(usersItem.getProfileuri() != null){
+                    //java.lang.IllegalArgumentException: You cannot start a load for a destroyed activi
+                    Glide.with(context).load(usersItem.getProfileuri()).into(holder.profile);
+                }
             }
 
             @Override
@@ -67,11 +75,13 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nickname;
         TextView follow_cnt;
+        CircleImageView profile;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.nickname = itemView.findViewById(R.id.f_nick);
             this.follow_cnt = itemView.findViewById(R.id.num_yourfer);
+            this.profile = itemView.findViewById(R.id.f_image);
         }
     }
 }
