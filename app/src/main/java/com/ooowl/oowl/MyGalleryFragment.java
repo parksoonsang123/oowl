@@ -269,7 +269,7 @@ public class MyGalleryFragment extends Fragment {
             @Override
             public void onClick(final View v) {   //프로필 사진 삭제
                 final DatabaseReference reference6 = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-                reference6.addValueEventListener(new ValueEventListener() {
+                reference6.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         UsersItem item = snapshot.getValue(UsersItem.class);
@@ -282,6 +282,7 @@ public class MyGalleryFragment extends Fragment {
                             item.setProfileimagename(null);
                             reference6.setValue(item);
 
+                            normal_dialog.dismiss();
                         }
                         else{
                             Toast.makeText(v.getContext(), "프로필 사진이 없습니다.", Toast.LENGTH_SHORT).show();
