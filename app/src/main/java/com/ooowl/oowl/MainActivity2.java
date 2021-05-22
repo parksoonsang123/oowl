@@ -53,7 +53,7 @@ public class MainActivity2 extends AppCompatActivity {
     Switch aSwitch;
     LinearLayout menu2;
     LinearLayout menu3;
-    //LinearLayout menu4;
+    LinearLayout menu4;
 
     LinearLayout menu11;
     LinearLayout menu12;
@@ -70,7 +70,6 @@ public class MainActivity2 extends AppCompatActivity {
         aSwitch = findViewById(R.id.alram_switch);
         menu2 = findViewById(R.id.menu2);
         menu3 = findViewById(R.id.menu3);
-        //menu4 = findViewById(R.id.menu4);
 
         menu12 = findViewById(R.id.menu12);
         menu11 = findViewById(R.id.menu11);
@@ -216,21 +215,6 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-        /*menu4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //문의하기
-
-
-
-
-
-                //drawerLayout 집어넣기
-                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
-                    drawerLayout.closeDrawer(GravityCompat.END);
-                }
-            }
-        });*/
 
         menu11.setOnClickListener(new View.OnClickListener() {
             @Override

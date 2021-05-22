@@ -81,10 +81,10 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(position == mDataList.size()-1){
                 if(mDataList.get(position).isIsseen()){
-                    ((SecondViewHolder) holder).txt_seen.setText("Seen");
+                    ((SecondViewHolder) holder).txt_seen.setText("");
                 }
                 else{
-                    ((SecondViewHolder) holder).txt_seen.setText("Delivered");
+                    ((SecondViewHolder) holder).txt_seen.setText("1");
                 }
             }
             else{
