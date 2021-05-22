@@ -210,9 +210,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="2dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="15dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -286,7 +286,19 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/addr1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="주소 출력"
+                            android:textColor="#000000" />
+                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -304,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:text="제목"
                     android:textColor="#000000"
-                    android:textSize="30dp"
+                    android:textSize="25dp"
                     android:textStyle="bold"/>
 
 
@@ -315,7 +327,7 @@
                     android:layout_height="wrap_content"
                     android:text="설명"
                     android:textColor="#000000"
-                    android:textSize="20dp"/>
+                    android:textSize="18dp"/>
 
 
             </LinearLayout>

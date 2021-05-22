@@ -56,7 +56,19 @@
                 android:textSize="12dp"
                 android:textColor="#939393"/>
         </LinearLayout>
+    <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
 
+        <TextView
+            android:id="@+id/item_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#939393"
+            android:textSize="12dp"
+            android:text="주소 출력" />
+        </LinearLayout>
         <TextView
             android:layout_marginTop="8dp"
             android:id="@+id/board_price"
@@ -75,13 +87,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:src="@drawable/heart"/>
 
             <TextView

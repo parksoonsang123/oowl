@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,6 +69,8 @@ public class BoardDetailActivity extends AppCompatActivity {
     ViewPager viewPager;
     BoardDetailViewPagerAdapter adapter;
 
+    TextView addr1;
+
     Button jjim;
 
     ImageView[] btn = new ImageView[5];
@@ -118,7 +121,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         remake = findViewById(R.id.detail_remake);
         del = findViewById(R.id.detail_del);
         chat = findViewById(R.id.chat);
-
+        addr1 = findViewById(R.id.addr1);
         viewPager = findViewById(R.id.detail_viewpager);
 
         if(!userid.equals(postuserid)){
@@ -370,7 +373,7 @@ public class BoardDetailActivity extends AppCompatActivity {
 
                 title.setText(item.getTitle());
                 contents.setText(item.getContents());
-
+                addr1.setText("주소: " + item.getAddress());
                 String ppp = "";
                 String p = item.getPrice();
                 String pp = p.replace("₩", "");

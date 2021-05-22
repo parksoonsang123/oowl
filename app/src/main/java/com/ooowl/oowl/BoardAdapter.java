@@ -43,7 +43,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         PostItem item1 = mDataList.get(position);
         holder.title.setText(item1.getTitle());
         holder.nickname.setText(item1.getNickname());
-
+        holder.addr.setText(item1.getAddress());
 
         Long t = Long.parseLong(item1.getWritetime());
         holder.time.setText(formatTimeString(t));
@@ -79,6 +79,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         TextView time;
         TextView price;
         TextView jjimcnt;
+        TextView addr;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,7 +89,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             time = itemView.findViewById(R.id.board_time);
             price = itemView.findViewById(R.id.board_price);
             jjimcnt = itemView.findViewById(R.id.board_jjimcnt);
-
+            addr = itemView.findViewById((R.id.item_addr));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
