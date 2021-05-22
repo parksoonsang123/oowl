@@ -24,13 +24,12 @@ public class EditDialog extends Dialog {
 
     private Context context;
 
+
     public EditText nick;
 
     public TextView OK;
     public TextView NO;
-
     String uid;
-
     public EditDialog(@NonNull Context context, String uid) {
         super(context);
         this.context = context;
