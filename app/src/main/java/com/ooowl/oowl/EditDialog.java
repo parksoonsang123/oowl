@@ -109,7 +109,7 @@ public class EditDialog extends Dialog {
             public void onClick(View v) {
                 dismiss();
             }
-        });
+        });//
 
 
 
